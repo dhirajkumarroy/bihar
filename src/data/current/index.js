@@ -1,0 +1,13 @@
+import {administrationCurrentRecords} from './administration';
+import {currentDataMethodology,currentDataOwnership,currentDataTypes,currentEntityKeys,currentRecordStatuses,freshnessPolicies} from './config';
+import {eventCurrentRecords} from './events';
+import {governanceCurrentRecords} from './governance';
+import {infrastructureCurrentRecords} from './infrastructure';
+import {institutionCurrentRecords} from './institutions';
+import {statisticCurrentRecords} from './statistics';
+import {tourismCurrentRecords} from './tourism';
+export {currentDataMethodology,currentDataOwnership,currentDataTypes,currentEntityKeys,currentRecordStatuses,freshnessPolicies};
+export {daysSinceVerification,getCurrentRecord,getCurrentRecordsByType,getFreshnessState,isCurrent,isExpired,isStale,policyFor} from './utils';
+export const currentDataRegistry=[...governanceCurrentRecords,...infrastructureCurrentRecords,...eventCurrentRecords,...statisticCurrentRecords,...administrationCurrentRecords,...institutionCurrentRecords,...tourismCurrentRecords];
+export const currentRecordById=id=>currentDataRegistry.find(record=>record.id===id)||null;
+export const currentRecordsForEntity=(entityType,entityId)=>currentDataRegistry.filter(record=>record.entityType===entityType&&record.entityId===entityId);

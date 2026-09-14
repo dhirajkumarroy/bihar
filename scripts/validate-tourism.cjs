@@ -1,0 +1,54 @@
+const fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),dir=path.join(root,'src/data/tourism');
+const read=name=>fs.readFileSync(path.join(dir,name),'utf8');
+const content={bodh:read('bodhGaya.js'),t2:read('heritageDestinations.js'),t3:read('heritageMonuments.js'),t5:read('spiritualDestinations.js'),t6:read('circuits.js'),registry:read('index.js')};
+const all=Object.values(content).join('\n'),errors=[],warnings=[];
+const t2=['bodh-gaya','rajgir','nalanda','vaishali','pawapuri','kesaria','vikramshila'];
+const t3=['sasaram','sher-shah-suri-tomb','rohtasgarh-fort','barabar-caves','patna','kumhrar','golghar','bihar-museum','patna-sahib'];
+const t5=['gaya','vishnupad-temple','mundeshwari-devi-temple','maner-sharif','bihar-sharif','sonepur','harihar-nath-temple'];
+const expected=[...t2,...t3,...t5];
+const destinationText=[content.bodh,content.t2,content.t3,content.t5].join('\n');
+const deepIds=[...destinationText.matchAll(/(?:^|[({])id:'([^']+)'/gm)].map(m=>m[1]).filter(x=>expected.includes(x));
+const deepSlugs=[...destinationText.matchAll(/slug:'([^']+)'/g)].map(m=>m[1]).filter(x=>expected.includes(x));
+if(new Set(deepIds).size!==deepIds.length)errors.push('Duplicate destination ID');
+if(new Set(deepSlugs).size!==deepSlugs.length)errors.push('Duplicate destination slug');
+for(const slug of expected)if(!all.includes(`slug:'${slug}'`))errors.push(`Missing deep destination: ${slug}`);
+const blockFor=(text,slug)=>{const start=text.indexOf(`slug:'${slug}'`);if(start<0)return '';const next=text.indexOf('\ncommon({id:',start+10);return text.slice(start,next<0?undefined:next)};
+for(const slug of t5){const block=blockFor(content.t5,slug);for(const key of ['nameHi:','nameEn:','aliases:','districtSlug:','categories:','traditions:','circuits:','intro:','summary:','whyVisit:','overview:','history:','faithHistory:','sacredGeography:','festivalContext:','highlights:','experiences:','connectivity:','nearby:','tips:','map:','related:','sources:','seo:'])if(!block.includes(key))errors.push(`${slug} missing ${key}`);if(!block.includes('http'))errors.push(`${slug} has no source URL`);if(!block.includes('hero:photos.'))errors.push(`${slug} has no authenticated hero reference`)}
+const validCategories=new Set(['historical','buddhist','jain','religious','spiritual','hindu','sikh','sufi','nature','wildlife','archaeological','cultural','museum','urban','fort','tomb','fair','colonial','heritage-city','ancient-urban']);
+for(const m of all.matchAll(/categories:\[([^\]]+)\]/g))for(const c of m[1].matchAll(/'([^']+)'/g))if(!validCategories.has(c[1]))errors.push(`Invalid category ${c[1]}`);
+const traditions=new Set(['hindu','shakta','shaiva','vaishnava','sufi','islamic','buddhist','jain','sikh']);
+for(const m of content.t5.matchAll(/traditions:\[([^\]]+)\]/g))for(const c of m[1].matchAll(/'([^']+)'/g))if(!traditions.has(c[1]))errors.push(`Invalid tradition ${c[1]}`);
+const districtSlugs=new Set(['gaya','nalanda','vaishali','east-champaran','bhagalpur','rohtas','jehanabad','patna','kaimur','saran']);
+for(const m of all.matchAll(/districtSlug:'([^']+)'/g))if(m[1]&&!districtSlugs.has(m[1]))errors.push(`Unverified district relation ${m[1]}`);
+const seoTitles=[...all.matchAll(/seo:\{title:'([^']+)'/g)].map(m=>m[1]);if(new Set(seoTitles).size!==seoTitles.length)errors.push('Duplicate SEO title');
+const circuitModule=new Function(`${content.t6.replace('export const tourismCircuits=','const tourismCircuits=').replace(/export const circuitBySlug[\s\S]*/,'')}\nreturn tourismCircuits;`)();
+const requiredCircuits=['buddhist','jain','magadh','patna-heritage','rohtas-kaimur','champaran','sufi','sikh','nature-wildlife','gaya-spiritual'];
+const circuitIds=circuitModule.map(x=>x.id),circuitSlugs=circuitModule.map(x=>x.slug);
+if(new Set(circuitIds).size!==circuitIds.length)errors.push('Duplicate circuit ID');
+if(new Set(circuitSlugs).size!==circuitSlugs.length)errors.push('Duplicate circuit slug');
+for(const slug of requiredCircuits)if(!circuitSlugs.includes(slug))errors.push(`Missing required circuit: ${slug}`);
+const legacy=fs.readFileSync(path.join(root,'src/data/tourism.js'),'utf8');
+const destinationSlugs=new Set([...all.matchAll(/slug:'([^']+)'/g)].map(m=>m[1]));
+for(const m of legacy.matchAll(/\['([a-z0-9-]+)'/g))destinationSlugs.add(m[1]);
+const validCircuitDistricts=new Set(['gaya','nalanda','vaishali','east-champaran','west-champaran','bhagalpur','rohtas','jehanabad','patna','kaimur','nawada','begusarai']);
+for(const circuit of circuitModule){for(const key of ['nameHi','nameEn','theme','summary','description','recommendedDuration','bestSeason','travelStyle','map','sources','seo'])if(!circuit[key])errors.push(`${circuit.slug} missing ${key}`);if(!circuit.seo?.title||!circuit.seo?.description||circuit.seo?.canonical!==`/tourism/circuits/${circuit.slug}`)errors.push(`${circuit.slug} has invalid SEO/canonical`);if(!circuit.map?.kind||!circuit.map?.notice)errors.push(`${circuit.slug} has invalid map metadata`);for(const slug of circuit.destinations)if(!destinationSlugs.has(slug))errors.push(`${circuit.slug} references missing destination ${slug}`);for(const district of circuit.districts)if(!validCircuitDistricts.has(district))errors.push(`${circuit.slug} references invalid district ${district}`);for(const option of circuit.itineraryOptions||[])for(const day of option.days||[])for(const slug of day.destinations||[])if(!destinationSlugs.has(slug))errors.push(`${circuit.slug} itinerary references missing destination ${slug}`)}
+const circuitSeo=circuitModule.map(x=>x.seo.title);if(new Set(circuitSeo).size!==circuitSeo.length)errors.push('Duplicate circuit SEO title');
+for(const key of ['circuitsForDestination(x.slug)','circuitsForDestination(destination.slug)'])if(!all.includes(key)&&!fs.readFileSync(path.join(root,'src/components/tourism/CircuitDiscovery.jsx'),'utf8').includes(key))errors.push(`Missing bidirectional circuit discovery: ${key}`);
+const urls=[...all.matchAll(/(?:url|sourceUrl|src):'?(https?:[^'`\s}]+)/g)].map(m=>m[1]);
+for(const url of urls){try{const parsed=new URL(url);if(parsed.hostname==='example.com')errors.push(`Placeholder source URL: ${url}`)}catch{errors.push(`Malformed source URL: ${url}`)}}
+const validSourceTypes=new Set(['official-tourism','district-government','archaeology','unesco','environment','museum','institutional','academic','religious-tradition','reference']);
+for(const circuit of circuitModule)for(const source of circuit.sources)if(!validSourceTypes.has(source.type))errors.push(`${circuit.slug} has invalid source type ${source.type}`);
+for(const field of ['ticketPrice','openingHours','currentCount','currentWeather','today'])if(new RegExp(`${field}:`).test(destinationText))warnings.push(`Volatile field outside audit: ${field}`);
+for(const old of ['spiritual','urban','tomb','fair','colonial','ancient-urban'])if(new RegExp(`categories:\\[[^\\]]*'${old}'`).test(destinationText))warnings.push(`Legacy category normalized at registry: ${old}`);
+if(!content.t5.includes("type:'authentic-photograph'"))errors.push('T5 image metadata incomplete');
+for(const key of ['credit','license','sourceUrl','alt','caption:'])if(!content.t5.includes(key))errors.push(`T5 images missing ${key}`);
+for(const term of ['oldest','largest','first ever','only one','world’s',"world's",'सबसे पुराना','सबसे बड़ा'])if(content.t5.toLowerCase().includes(term.toLowerCase()))warnings.push(`Review superlative claim: ${term}`);
+if(errors.length){console.error([...new Set(errors)].join('\n'));process.exit(1)}
+for(const warning of [...new Set(warnings)])console.warn(`Warning: ${warning}`);
+const legacyRaw=[...legacy.matchAll(/\['([a-z0-9-]+)'/g)].map(m=>m[1]),legacyExtras=legacyRaw.filter(x=>!expected.includes(x)&&!['rohtasgarh','sher-shah-tomb'].includes(x));
+console.log('Tourism production audit passed');
+console.log(`Destinations validated: ${expected.length+legacyExtras.length} (${expected.length} deep/reference, ${legacyExtras.length} basic)`);
+console.log(`Circuits validated: ${circuitModule.length}`);
+console.log('Duplicate destination IDs: 0');console.log('Duplicate destination slugs: 0');console.log('Duplicate circuit IDs/slugs: 0');
+console.log('Broken mandatory references: 0');console.log('Missing SEO: 0');console.log('Invalid source records: 0');

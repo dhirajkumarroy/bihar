@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="t d">
+ <title id="t">बिहार की लोक प्रदर्शन परंपराएँ</title><desc id="d">मरून, केसरिया और मिट्टी के रंगों में मंच, स्वर और ताल का अमूर्त रूपांकन</desc>
+ <rect width="1200" height="800" fill="#f4ead8"/><circle cx="600" cy="410" r="238" fill="#6d2734"/><circle cx="600" cy="410" r="170" fill="none" stroke="#d88a24" stroke-width="22"/>
+ <path d="M0 640C190 500 300 760 510 610S840 520 1200 660V800H0Z" fill="#b65132"/><path d="M0 705C250 570 390 820 650 680s360-40 550 30v90H0Z" fill="#d99b32" opacity=".9"/>
+ <g fill="#f4ead8"><circle cx="530" cy="340" r="35"/><circle cx="670" cy="340" r="35"/><path d="M480 515q50-140 100 0zm140 0q50-140 100 0z"/></g>
+ <g fill="none" stroke="#d88a24" stroke-width="12" stroke-linecap="round"><path d="M285 230q-50 180 35 315"/><path d="M915 230q50 180-35 315"/><path d="M250 230h70M880 230h70"/></g>
+</svg>

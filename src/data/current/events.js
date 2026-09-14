@@ -1,0 +1,3 @@
+export const eventCurrentRecords=[
+ {id:'event-chhath-2026-state-calendar',entityType:'event',entityId:'chhath',dataType:'event-date',value:{label:'बिहार सरकार के 2026 calendar में Chhath Puja holiday window',startDate:'2026-11-15',endDate:'2026-11-16'},effectiveFrom:'2026-11-15',effectiveTo:'2026-11-16',lastVerified:'2026-09-13',freshnessPolicy:'event-explicit',status:'scheduled',source:{title:'Bihar Government Calendar 2026',publisher:'Government of Bihar',url:'https://tourism.bihar.gov.in/content/dam/bihar-tourism/catalogue/bihar-govt-calender-2026.pdf',accessedAt:'2026-09-13'},notes:'यह state-calendar holiday window है; इसे पूर्ण धार्मिक observance schedule नहीं माना जाना चाहिए।',confidence:'high'}
+];

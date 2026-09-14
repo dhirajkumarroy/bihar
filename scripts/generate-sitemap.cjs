@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseUrl = 'https://sampoornabihar.in';
+const baseUrl = process.env.SITE_URL || 'https://bihar-eight.vercel.app';
 
 // Helper to extract exported items
 const load = (relPath, varNames) => {

@@ -3,18 +3,34 @@ import {Link} from 'react-router-dom';
 import {ArrowRight,ChevronRight,BookOpen,MapPin,ExternalLink} from 'lucide-react';
 import {Card,Badge,ActionLink,EmptyState as SharedEmptyState} from './ui';
 
-export function SEO({title,description,type='website',canonicalPath,image='/assets/bihar-hero.png',schema={}}){
+export function SEO({title,description,type='website',canonicalPath,image='/assets/bihar-hero.png',keywords,schema={}}){
  useEffect(()=>{
-  const desc=description||`${title} के बारे में विस्तृत हिंदी जानकारी।`,origin=location.origin,normalizedPath=location.pathname.replace(/^\/districts\//,'/district/'),url=canonicalPath?`${origin}${canonicalPath}`:`${origin}${normalizedPath}`,imageUrl=image.startsWith('http')?image:`${origin}${image}`;
+  const desc=description||`${title} — सम्पूर्ण बिहार पोर्टल पर प्रामाणिक जानकारी।`,origin=location.origin,normalizedPath=location.pathname.replace(/^\/districts\//,'/district/'),url=canonicalPath?`${origin}${canonicalPath}`:`${origin}${normalizedPath}`,imageUrl=image.startsWith('http')?image:`${origin}${image}`;
   const personSlugs=['chandragupta-maurya','chanakya','bindusara','ashoka','aryabhata','xuanzang','yijing','bakhtiyar-khalji','sher-shah-suri','veer-kunwar-singh','gandhi-in-bihar','rajendra-prasad'];
   const inferredPerson=location.pathname.startsWith('/personalities/')||personSlugs.some(slug=>location.pathname===`/history/${slug}`),effectiveType=inferredPerson?'person':type;
   const schemaType=effectiveType==='person'?'Person':effectiveType==='article'?'Article':effectiveType==='place'?'Place':'WebPage',openGraphType=effectiveType==='person'?'profile':effectiveType==='article'?'article':'website';
-  document.title=`${title} | सम्पूर्ण बिहार`;document.documentElement.lang='hi';
+  const fullTitle=title.includes('सम्पूर्ण बिहार')?title:`${title} | सम्पूर्ण बिहार`;
+  document.title=fullTitle;
+  document.documentElement.lang='hi';
   const set=(selector,attr,value)=>{let el=document.head.querySelector(selector);if(!el){el=document.createElement('meta');document.head.appendChild(el)}el.setAttribute(attr,value)};
-  set('meta[name="description"]','content',desc);set('meta[property="og:title"]','content',title);set('meta[property="og:description"]','content',desc);set('meta[property="og:type"]','content',openGraphType);set('meta[property="og:url"]','content',url);set('meta[property="og:image"]','content',imageUrl);set('meta[name="twitter:card"]','content','summary_large_image');set('meta[name="twitter:title"]','content',title);set('meta[name="twitter:description"]','content',desc);set('meta[name="twitter:image"]','content',imageUrl);
+  set('meta[name="description"]','content',desc);
+  set('meta[name="robots"]','content','index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+  if(keywords)set('meta[name="keywords"]','content',keywords);
+  set('meta[property="og:title"]','content',fullTitle);
+  set('meta[property="og:description"]','content',desc);
+  set('meta[property="og:type"]','content',openGraphType);
+  set('meta[property="og:url"]','content',url);
+  set('meta[property="og:image"]','content',imageUrl);
+  set('meta[property="og:site_name"]','content','सम्पूर्ण बिहार — Bihar Portal');
+  set('meta[property="og:locale"]','content','hi_IN');
+  set('meta[name="twitter:card"]','content','summary_large_image');
+  set('meta[name="twitter:title"]','content',fullTitle);
+  set('meta[name="twitter:description"]','content',desc);
+  set('meta[name="twitter:image"]','content',imageUrl);
   let canonical=document.querySelector('link[rel="canonical"]');if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}canonical.href=url;
-  let json=document.querySelector('#page-schema');if(!json){json=document.createElement('script');json.id='page-schema';json.type='application/ld+json';document.head.appendChild(json)}json.textContent=JSON.stringify({'@context':'https://schema.org','@type':schemaType,name:title,description:desc,url,image:imageUrl,...schema});
- },[title,description,type,canonicalPath,image,schema]);return null
+  let json=document.querySelector('#page-schema');if(!json){json=document.createElement('script');json.id='page-schema';json.type='application/ld+json';document.head.appendChild(json)}
+  json.textContent=JSON.stringify({'@context':'https://schema.org','@type':schemaType,name:fullTitle,description:desc,url,image:imageUrl,inLanguage:'hi',publisher:{'@type':'Organization',name:'सम्पूर्ण बिहार',url:origin,logo:{'@type':'ImageObject',url:`${origin}/assets/bihar-districts-heritage.svg`}},...schema});
+ },[title,description,type,canonicalPath,image,keywords,schema]);return null
 }
 export function Breadcrumbs({items=[]}){useEffect(()=>{let el=document.querySelector('#breadcrumb-schema');if(!el){el=document.createElement('script');el.id='breadcrumb-schema';el.type='application/ld+json';document.head.appendChild(el)}const origin=location.origin;el.textContent=JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{position:1,name:'मुखपृष्ठ',item:`${origin}/`},...items.map((x,i)=>({position:i+2,name:x.label,item:x.to?`${origin}${x.to}`:location.href}))].map(x=>({'@type':'ListItem',...x}))});},[items]);return <nav className="breadcrumbs" aria-label="ब्रेडक्रंब"><Link to="/">मुखपृष्ठ</Link>{items.map(x=><span key={x.label}><ChevronRight aria-hidden="true"/>{x.to?<Link to={x.to}>{x.label}</Link>:<b aria-current="page">{x.label}</b>}</span>)}</nav>}
 export function PageHero({eyebrow,title,description,image,children}){return <section className={'page-hero '+(image?'with-image':'')} style={image?{'--page-image':`url(${image})`}:null}><div><span>{eyebrow}</span><h1>{title}</h1><p>{description}</p>{children}</div></section>}

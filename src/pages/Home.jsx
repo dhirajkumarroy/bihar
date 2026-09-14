@@ -1,12 +1,25 @@
 import {Link} from 'react-router-dom';
 import {motion} from 'framer-motion';
 import {ArrowRight,MapPin,Compass,ChevronRight,Quote,CalendarDays} from 'lucide-react';
+import {SEO} from '../components/Portal';
 import {SectionTitle} from '../components/Layout';
 import BiharDistrictMap from '../components/BiharDistrictMap';
 import {stats,eras,destinations,culture,people} from '../data/content';
 import {districts} from '../data/districts';
 const reveal={initial:{opacity:0,y:28},whileInView:{opacity:1,y:0},viewport:{once:true,amount:.2},transition:{duration:.65}};
 export default function Home(){return <main>
+ <SEO
+  title="सम्पूर्ण बिहार — इतिहास, संस्कृति, 38 जिले एवं पर्यटन पोर्टल"
+  description="बिहार की समृद्ध ऐतिहासिक विरासत, 38 जिलों की प्रशासनिक व भौगोलिक पहचान, नालंदा, बोधगया, राजगीर, लोकसंस्कृति, नदियाँ और पर्यटन का प्रामाणिक डिजिटल पोर्टल।"
+  canonicalPath="/"
+  keywords="बिहार, Bihar, Bihar Portal, Bihar Tourism, Bihar History, Bihar Culture, 38 Districts of Bihar, Nalanda, Bodh Gaya, Rajgir, Mithila Painting, Chhath Puja, Litti Chokha"
+  schema={{
+    '@type': 'WebSite',
+    name: 'सम्पूर्ण बिहार',
+    alternateName: 'Bihar Cultural & Tourism Portal',
+    description: 'बिहार के 38 जिलों, इतिहास, संस्कृति और पर्यटन का व्यापक हिंदी डिजिटल पोर्टल।'
+  }}
+ />
  <section className="hero"><div className="hero-bg"/><motion.div className="hero-copy" initial={{opacity:0,y:30}} animate={{opacity:1,y:0}} transition={{duration:.8}}><span className="kicker">भारत की प्राचीन ज्ञान-भूमि</span><h1><em>बिहार</em> — जहाँ इतिहास ने भारत को दिशा दी</h1><p>सभ्यताओं की जन्मभूमि, ज्ञान की प्राचीन ज्योति और लोकजीवन के अनगिनत रंगों से सजी एक जीवंत यात्रा।</p><div className="hero-actions"><a className="btn primary" href="#history">इतिहास देखें <ArrowRight/></a><a className="btn secondary" href="#tourism">यात्रा शुरू करें <Compass/></a></div></motion.div><div className="hero-note"><span>01</span><p><b>नालंदा</b><br/>विश्व की प्राचीनतम ज्ञान परंपराओं में से एक</p></div></section>
  <section className="stats">{stats.map(([n,l])=><div key={l}><strong>{n}</strong><span>{l}</span></div>)}</section>
  <section id="about" className="intro"><motion.div {...reveal}><span className="chapter">01 · बिहार का परिचय</span><h2>एक प्रदेश, <em>अनेक संसार</em></h2></motion.div><motion.div {...reveal}><p className="lead">हिमालय की तराई से गंगा के मैदानों तक, बिहार केवल एक भौगोलिक प्रदेश नहीं—यह विचार, आस्था और जन-संस्कृति की अनवरत यात्रा है।</p><p>यहीं बुद्ध को ज्ञान मिला, महावीर ने अहिंसा का संदेश दिया और नालंदा ने संसार को सीखने की नई दृष्टि दी।</p><a className="text-link" href="#history">बिहार को विस्तार से जानें <ArrowRight/></a></motion.div></section>

@@ -66,11 +66,11 @@ check(Object.values(data.governanceSources).every(x=>x.id&&x.title&&x.publisher&
 
 const ui=read('src/components/governance/GovernanceModule.jsx');
 const app=read('src/App.jsx');
-const search=read('src/pages/SearchPage.jsx');
+const search=read('src/data/searchIndex.js');
 const districtUi=read('src/components/district/DistrictDetailPage.jsx');
 const requiredRoutes=['/governance','/governance/administration','/governance/state-government','/governance/legislature','/governance/executive','/governance/judiciary','/governance/local-government','/governance/panchayati-raj','/governance/urban-local-bodies','/governance/public-services','/governance/district-administration','/governance/:slug'];
 check(requiredRoutes.every(route=>app.includes(`path="${route}"`)),'All required G8 routes are registered');
-check(search.includes('governanceSearchRecords')&&search.includes("['शासन',governanceSearch]"),'Global search includes governance aliases and disambiguation records');
+check(search.includes('governanceSearchRecords')&&search.includes("genericEntries(governanceSearchRecords,'शासन')"),'Global search includes governance aliases and disambiguation records');
 check(districtUi.includes('/governance/district-administration'),'District profiles link to canonical governance explanation');
 check(ui.includes('/society/urbanization')&&ui.includes('/economy/development')&&ui.includes('/history/modern-bihar'),'Governance pages cross-link society, economy and history modules');
 check(ui.includes('कानूनी सलाह नहीं')&&ui.includes('forms, fees, eligibility'),'Legal-advice and live-service boundaries are visible in the UI');

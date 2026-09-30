@@ -1,0 +1,69 @@
+[
+  {
+    "id": "mahabodhi-temple",
+    "folder": "buddhism",
+    "file": "Mahabodhi Temple, Bodh Gaya, Bihar, India.jpg",
+    "local": "assets/tourism/bodh-gaya-mahabodhi.jpg",
+    "alt": "बोधगया का महाबोधि मंदिर परिसर / Mahabodhi Temple, Bodh Gaya"
+  },
+  {
+    "id": "nalanda-monastery",
+    "folder": "buddhism",
+    "file": "Temple 12 - Nalanda Mahavihara (17).jpg",
+    "alt": "नालंदा के मंदिर 12 परिसर में शिल्प-विवरण / Carved stone detail in the Temple 12 precinct, Nalanda"
+  },
+  {
+    "id": "rajgir-stupa",
+    "folder": "buddhism",
+    "file": "Ajatsatru Stupa - Rajgir - From North (3).jpg",
+    "alt": "राजगीर में अजातशत्रु स्तूप के अवशेष / Ajatshatru Stupa remains, Rajgir"
+  },
+  {
+    "id": "vaishali-pillar",
+    "folder": "buddhism",
+    "file": "Ananda Stupa with Ashok lion pillar at vaishali, Bihar 03.jpg",
+    "alt": "वैशाली में स्तूप और सिंह-शीर्ष स्तंभ / Stupa and lion pillar, Vaishali"
+  },
+  {
+    "id": "pawapuri-jal-mandir",
+    "folder": "jainism",
+    "file": "Jal Mandir - Pawapuri 14.jpg",
+    "alt": "पावापुरी जल मंदिर का आंतरिक पूजास्थल / Interior shrine detail, Jal Mandir, Pawapuri"
+  },
+  {
+    "id": "kesaria-stupa",
+    "folder": "buddhism",
+    "file": "Buddhist Stupa at Kesariya (wide angle view) at Champaran (east) district of Bihar, India 08.jpg",
+    "alt": "पूर्वी चंपारण का केसरिया स्तूप / Kesaria Stupa, East Champaran"
+  },
+  {
+    "id": "takht-patna-sahib",
+    "folder": "sikh",
+    "file": "Takht Sri Patna Sahib 02.jpg",
+    "alt": "तख्त श्री पटना साहिब / Takht Sri Patna Sahib"
+  },
+  {
+    "id": "vishnupad-gaya",
+    "folder": "hindu",
+    "file": "Vishnupad Temple, Gaya, Bihar.JPG",
+    "alt": "विष्णुपद परिसर का आँगन और सीढ़ियाँ / Courtyard and steps in the Vishnupad precinct"
+  },
+  {
+    "id": "mundeshwari-sculpture",
+    "folder": "hindu",
+    "file": "A statue found at Mundeshwari Devi temple.jpg",
+    "alt": "मुंडेश्वरी से प्राप्त शिल्प का चित्र; पूरा मंदिर नहीं / Sculpture associated with Mundeshwari, not the entire temple"
+  },
+  {
+    "id": "maner-chhoti-dargah",
+    "folder": "islam",
+    "file": "Maner Sharif Lake in front of Chhoti Dargah housing tomb of Makhdoom Shah Daulat at Maner, a satellite town in Patna Metropolitan Region, Bihar, India 03.jpg",
+    "alt": "मनेर की छोटी दरगाह के बाहर जलाशय और दीवार / Tank and exterior wall beside Chhoti Dargah, Maner"
+  },
+  {
+    "id": "padri-ki-haveli",
+    "folder": "christian",
+    "file": "Padri Ki Haveli - Patna (8).jpg",
+    "alt": "पादरी की हवेली का प्रवेश-द्वार / Entrance gate at Padri Ki Haveli"
+  }
+]

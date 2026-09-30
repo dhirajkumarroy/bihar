@@ -1,28 +1,63 @@
-const fs=require('fs'),path=require('path'),root=path.join(__dirname,'..'),errors=[];
-const text=fs.readFileSync(path.join(root,'src/data/festivals/index.js'),'utf8');
-const topics=new Function(`${text.replace(/export const /g,'const ')}\nreturn festivalTopics;`)();
-const types=new Set(['religious-festival','seasonal-festival','folk-festival','life-cycle-tradition','pilgrimage','fair','cultural-fair','harvest-season','river-festival','regional-tradition']);
-const districts=new Set(['patna','aurangabad','saran','gaya','darbhanga','madhubani','sitamarhi','bhagalpur','banka','nalanda','bhojpur']);
-const cultureRoutes=new Set(['sohar','samdaun','chaita','mithila-painting','manjusha-art']);
-const tourismRoutes=new Set(['deo-sun-temple','sonepur','gaya','vishnupad-temple','rajgir']);
-const foodRoutes=new Set(['thekua','tilkut','chura-dahi','khichdi-traditions']);
-const ids=new Set(),slugs=new Set(),names=new Set(),aliases=new Map();
+const fs=require('node:fs'),path=require('node:path'),root=path.join(__dirname,'..');
+const {loadDataModule}=require('./load-data-module.cjs');
+const load=file=>loadDataModule(path.join(root,'src/data',file));
+const {festivalTopics:topics,festivalBySlug,festivalRoutes,normalizeFestivalTerm}=load('festivals');
+const {searchPortal,searchIndex}=load('searchIndex.js');
+const errors=[];let checks=0;
+const check=(condition,message)=>{checks++;if(!condition)errors.push(message);};
+const ids=new Set(),slugs=new Set(),aliases=new Map(),images=new Set();
+const districts=new Set(load('districts.js').districts.map(x=>x.slug));
+const culture=load('culture/index.js'),tourism=load('tourism/index.js'),food=load('food/index.js'),languages=load('languages/index.js'),blogs=load('blogs.js');
+const validLink=to=>{
+ if(typeof to!=='string'||!to.startsWith('/')||to.startsWith('//'))return false;
+ const clean=to.split(/[?#]/)[0],parts=clean.split('/').filter(Boolean),slug=parts.at(-1);
+ if(parts[0]==='festivals')return festivalRoutes.includes(clean)||Boolean(festivalBySlug(slug));
+ if(parts[0]==='culture'&&parts[1]==='festivals')return parts.length===2||Boolean(festivalBySlug(slug));
+ if(parts[0]==='culture')return parts.length===1||Boolean(culture.cultureBySlug(slug))||load('catalog.js').cultureItems.some(x=>x.slug===slug);
+ if(parts[0]==='district')return districts.has(slug);
+ if(parts[0]==='tourism')return Boolean(tourism.tourismBySlug(slug));
+ if(parts[0]==='food')return Boolean(food.foodBySlug(slug));
+ if(parts[0]==='languages')return Boolean(languages.languageBySlug(slug));
+ if(parts[0]==='blog')return blogs.posts.some(x=>x.slug===slug);
+ return searchIndex.some(x=>x.to===clean)||fs.readFileSync(path.join(root,'src/App.jsx'),'utf8').includes('path="'+clean+'"');
+};
 for(const x of topics){
- for(const key of ['id','slug','nameHi','nameEn','category','festivalType','tags','culturalRegions','districts','summary','intro','culturalContext','historicalContext','religiousContext','season','traditionalCalendar','approximateGregorianPeriod','durationContext','socialMeaning','communityContext','modernChanges','sources','seo'])if(!x[key]||(Array.isArray(x[key])&&!x[key].length))errors.push(`${x.slug||'unknown'} missing ${key}`);
- if(ids.has(x.id))errors.push(`Duplicate festival ID ${x.id}`);ids.add(x.id);if(slugs.has(x.slug))errors.push(`Duplicate festival slug ${x.slug}`);slugs.add(x.slug);if(names.has(x.nameHi))errors.push(`Duplicate festival name ${x.nameHi}`);names.add(x.nameHi);
- if(x.category!=='festival'||!types.has(x.festivalType))errors.push(`${x.slug}: invalid festival classification`);if(x.seo.canonical!==`/culture/festivals/${x.slug}`)errors.push(`${x.slug}: invalid canonical`);
- for(const d of x.districts)if(!districts.has(d))errors.push(`${x.slug}: invalid district ${d}`);
- for(const a of x.aliases){const key=a.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g,'-').replace(/^-|-$/g,'');if(aliases.has(key)&&aliases.get(key)!==x.slug)errors.push(`Shared festival alias ${a}`);aliases.set(key,x.slug)}
- for(const s of x.sources){try{const u=new URL(s.url);if(!['http:','https:'].includes(u.protocol)||u.hostname==='example.com')errors.push(`${x.slug}: invalid source`)}catch{errors.push(`${x.slug}: malformed source ${s.url}`)}if(!s.type)errors.push(`${x.slug}: source type missing`)}
- for(const r of x.relatedCulture)if(r.to.startsWith('/culture/')&&!cultureRoutes.has(r.to.slice(9)))errors.push(`${x.slug}: broken culture ref ${r.to}`);
- for(const r of x.relatedTourism)if(!tourismRoutes.has(r.to.slice(9)))errors.push(`${x.slug}: broken tourism ref ${r.to}`);
- for(const r of [...x.relatedFood,...x.foods.filter(v=>v.to)])if(r.to?.startsWith('/food/')&&!foodRoutes.has(r.to.slice(6)))errors.push(`${x.slug}: broken food ref ${r.to}`);
- for(const media of x.gallery)if(!media.src||!media.credit||!media.source||!media.type)errors.push(`${x.slug}: invalid/sourceless media`);
- if(/\b2026\s*(date|schedule|तिथि)/i.test(JSON.stringify(x)))errors.push(`${x.slug}: current-year schedule leaked into permanent content`);
+ for(const key of ['id','slug','publicSlug','nameHindi','nameEnglish','category','religion','region','season','description','history','mythology','rituals','foods','songs','dress','places','tourism','images','seo','relatedFestival','sources','faith','seasonGroup']){
+  check(Boolean(x[key])&&(!Array.isArray(x[key])||x[key].length>0),x.slug+': missing '+key);
+ }
+ check(Array.isArray(x.months)&&x.months.every(n=>Number.isInteger(n)&&n>=1&&n<=12),x.slug+': months');
+ if(['moving','intercalary','scheduled'].includes(x.seasonGroup))check(x.months.length===0,x.slug+': speculative fixed month');
+ check(!ids.has(x.id),'duplicate id '+x.id);ids.add(x.id);
+ check(!slugs.has(x.publicSlug),'duplicate public slug '+x.publicSlug);slugs.add(x.publicSlug);
+ check(x.seo.canonical==='/festivals/'+x.publicSlug,x.slug+': canonical');
+ check(x.seo.title.length>12&&x.seo.description.length>45,x.slug+': missing/thin SEO');
+ for(const alias of x.aliases){const key=normalizeFestivalTerm(alias);check(!aliases.has(key)||aliases.get(key)===x.slug,'ambiguous alias '+alias);aliases.set(key,x.slug);check(festivalBySlug(alias)?.slug===x.slug,'alias lookup '+alias);}
+ for(const district of x.districts)check(districts.has(district),x.slug+': invalid district '+district);
+ for(const source of x.sources){try{const u=new URL(source.url);check(u.protocol==='https:'&&!/example\.|localhost/.test(u.hostname),x.slug+': invalid source');}catch{check(false,x.slug+': malformed source');}check(Boolean(source.title&&source.type),x.slug+': source metadata');}
+ check(x.gallery.length>0,x.slug+': gallery');
+ for(const media of [x.hero,...x.gallery]){
+  for(const key of ['src','thumbnail','alt','caption','credit','source','type','disclosure','width','height'])check(Boolean(media[key]),x.slug+': missing image '+key);
+  check(media.type==='ai-generated'&&media.disclosure.includes('AI'),x.slug+': missing AI disclosure');
+  check(fs.existsSync(path.join(root,media.source)),x.slug+': missing prompt provenance');
+  for(const file of [media.src,media.thumbnail]){
+   const full=path.join(root,'public',file);check(fs.existsSync(full),x.slug+': missing '+file);
+   if(fs.existsSync(full)){const data=fs.readFileSync(full);check(data.toString('ascii',0,4)==='RIFF'&&data.toString('ascii',8,12)==='WEBP',file+': not WebP');check(data.length<350000,file+': media budget');images.add(file);}
+  }
+ }
+ for(const field of ['relatedCulture','relatedTourism','relatedDistricts','relatedHistory','relatedFood','relatedLanguages','relatedBlogs','foods','songs','crafts','places'])for(const link of x[field]||[])if(link.to)check(validLink(link.to),x.slug+': broken '+link.to);
+ for(const slug of x.relatedFestival)check(Boolean(festivalBySlug(slug)),x.slug+': missing related festival '+slug);
+ check(searchIndex.filter(item=>item.to===x.seo.canonical).length===1,x.slug+': search canonical missing/duplicate');
 }
-for(const slug of ['chhath','sonepur-mela','pitru-paksha','sama-chakeva','jitiya','fagua','madhushravani','bihula-bishahari','makar-sankranti'])if(!slugs.has(slug))errors.push(`Missing core C5 topic ${slug}`);
-const current=fs.readFileSync(path.join(root,'src/data/current/events.js'),'utf8'),currentRegistry=fs.readFileSync(path.join(root,'src/data/current/index.js'),'utf8');if(!current.includes('event-chhath-2026-state-calendar')||!current.includes("freshnessPolicy:'event-explicit'")||!currentRegistry.includes('eventCurrentRecords'))errors.push('Central current festival event boundary missing');
-const app=fs.readFileSync(path.join(root,'src/App.jsx'),'utf8');for(const route of ['/culture/festivals','/culture/festivals/:slug'])if(!app.includes(`path="${route}"`))errors.push(`Missing route ${route}`);
-const ui=fs.readFileSync(path.join(root,'src/components/festivals/FestivalModule.jsx'),'utf8');for(const name of ['TraditionNote','CurrentFestivalNotice','SeasonalCalendar','FestivalDirectory','FestivalDetailPage'])if(!ui.includes(`function ${name}`))errors.push(`Missing component ${name}`);if(!ui.includes('CurrentEventOccurrence'))errors.push('Festival UI does not use central current-event component');
-if(errors.length){console.error([...new Set(errors)].join('\n'));process.exit(1)}
-console.log('Festival validation passed');console.log(`Deep festival/fair topics: ${topics.length}`);console.log('Duplicate IDs/slugs/names/aliases: 0');console.log('Broken district/culture/tourism/food refs: 0');console.log('Missing SEO/sources: 0');console.log('Current dates in permanent content: 0');console.log('Invalid or sourceless media: 0');
+const required=['chhath-puja','holi','durga-puja','diwali','sama-chakeva','jitiya','makar-sankranti','saraswati-puja','mahashivratri','ram-navami','teej','bihula-bishari','buddha-purnima','mahavir-jayanti','guru-gobind-singh-jayanti','eid-ul-fitr','eid-ul-adha','muharram','christmas','sonepur-mela','rajgir-mahotsav','shravani-mela','vaishali-mahotsav','bodh-mahotsav','pitrapaksha-mela','malmas-mela','mandar-mela','kako-urs'];
+for(const slug of required)check(slugs.has(slug),'missing requested profile '+slug);
+for(const slug of ['chhath','sonepur-mela','pitru-paksha','sama-chakeva','jitiya','fagua','madhushravani','bihula-bishahari','makar-sankranti'])check(Boolean(festivalBySlug(slug)),'legacy regression '+slug);
+check(topics.filter(x=>x.collection==='fairs').length===9,'expected nine requested fair profiles');
+const chhath=festivalBySlug('chhath');
+check(chhath.festivalStages.length===4&&chhath.gallery.length===3,'Chhath depth');
+for(const [query,slug] of [['छठ','chhath'],['Chhath','chhath'],['छठ पूजा','chhath'],['सामा चकेवा','sama-chakeva'],['होली','fagua'],['जितिया','jitiya'],['सोनपुर मेला','sonepur-mela']])check(searchPortal(query).some(x=>x.to===festivalBySlug(slug).seo.canonical),'global search alias '+query);
+const app=fs.readFileSync(path.join(root,'src/App.jsx'),'utf8');
+for(const route of ['/festivals','/festivals/religious','/festivals/fairs','/festivals/seasonal','/festivals/:slug','/culture/festivals','/culture/festivals/:slug'])check(app.includes('path="'+route+'"'),'missing route '+route);
+const ui=fs.readFileSync(path.join(root,'src/components/festivals/FestivalModule.jsx'),'utf8');
+for(const name of ['TraditionNote','CurrentFestivalNotice','SeasonalCalendar','FestivalDirectory','FestivalDetailPage'])check(ui.includes('function '+name),'missing component '+name);
+check(ui.includes('CurrentEventOccurrence')&&ui.includes('aria-expanded')&&ui.includes('noIndex'),'current boundary / interaction / unknown route');
+if(errors.length){console.error([...new Set(errors)].join('\n'));process.exitCode=1;}else console.log(JSON.stringify({status:'passed',checks,profiles:topics.length,fairs:9,canonicalRoutes:festivalRoutes.length,webpFiles:images.size,duplicateIds:0,missingImages:0,brokenReferences:0,searchAliases:'passed'},null,2));

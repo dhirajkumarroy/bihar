@@ -1,1 +1,47 @@
-{"scripts":{"dev":"vite","build":"vite build && node scripts/generate-sitemap.cjs","preview":"vite preview","generate:sitemap":"node scripts/generate-sitemap.cjs","validate:districts":"node scripts/validate-districts.cjs","validate:tourism":"node scripts/validate-tourism.cjs","validate:culture":"node scripts/validate-culture.cjs","validate:festivals":"node scripts/validate-festivals.cjs","validate:languages":"node scripts/validate-languages.cjs","validate:food":"node scripts/validate-food.cjs","validate:culture-all":"node scripts/validate-culture-all.cjs","validate:geography":"node scripts/validate-geography.cjs","validate:water":"node scripts/validate-water-systems.cjs","validate:ecology":"node scripts/validate-ecology.cjs","validate:agriculture":"node scripts/validate-agriculture.cjs","validate:economy":"node scripts/validate-economy.cjs","validate:society":"node scripts/validate-society.cjs","validate:governance":"node scripts/validate-governance.cjs","validate:current":"node scripts/validate-current-data.cjs"},"dependencies":{"@vitejs/plugin-react":"latest","vite":"latest","typescript":"latest","react":"latest","react-dom":"latest","react-router-dom":"latest","framer-motion":"latest","lucide-react":"latest"},"devDependencies":{}}
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/generate-sitemap.cjs && vite build && node scripts/prerender-festivals.cjs && node scripts/prerender-religion.cjs && node scripts/prerender-personalities.cjs",
+    "validate:personalities": "node scripts/validate-personalities.cjs",
+    "test:personalities": "node scripts/test-personalities.cjs",
+    "validate:religion": "node scripts/validate-religion.cjs",
+    "test:religion": "node scripts/test-religion.cjs",
+    "validate:religion-html": "node scripts/validate-religion-html.cjs",
+    "validate:history": "node scripts/validate-history-links.cjs",
+    "preview": "vite preview",
+    "generate:sitemap": "node scripts/generate-sitemap.cjs",
+    "validate:districts": "node scripts/validate-districts.cjs",
+    "validate:tourism": "node scripts/validate-tourism.cjs",
+    "validate:culture": "node scripts/validate-culture.cjs",
+    "validate:festivals": "node scripts/validate-festivals.cjs",
+    "test:festivals": "node scripts/test-festivals.cjs",
+    "validate:festival-html": "node scripts/validate-festival-html.cjs",
+    "validate:languages": "node scripts/validate-languages.cjs",
+    "validate:food": "node scripts/validate-food.cjs",
+    "validate:culture-all": "node scripts/validate-culture-all.cjs",
+    "validate:geography": "node scripts/validate-geography.cjs",
+    "validate:water": "node scripts/validate-water-systems.cjs",
+    "validate:ecology": "node scripts/validate-ecology.cjs",
+    "validate:agriculture": "node scripts/validate-agriculture.cjs",
+    "validate:economy": "node scripts/validate-economy.cjs",
+    "validate:society": "node scripts/validate-society.cjs",
+    "validate:governance": "node scripts/validate-governance.cjs",
+    "validate:politics": "node scripts/validate-politics.cjs",
+    "test:politics": "node scripts/test-politics.cjs",
+    "validate:current": "node scripts/validate-current-data.cjs",
+    "validate:seo-policy": "node scripts/validate-seo-policy.cjs",
+    "validate:search": "node scripts/validate-search-index.cjs",
+    "validate:portal": "node scripts/validate-portal.cjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "typescript": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {}
+}

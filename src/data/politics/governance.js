@@ -1,0 +1,28 @@
+import {departments,publicServices} from '../governance';
+import {makePage,makeRecord} from './model';
+import {section} from './concepts';
+
+const responsibilities={
+ home:['आंतरिक प्रशासन और सार्वजनिक सुरक्षा से जुड़े विभागीय कार्य','/governance/district-administration'],finance:['राज्य बजट, वित्तीय नियम और सार्वजनिक व्यय का संस्थागत संदर्भ','/economy'],education:['शिक्षा व्यवस्था, संस्थाएँ और विभागीय प्रशासन','/society/education'],health:['सार्वजनिक स्वास्थ्य संस्थाएँ और स्वास्थ्य प्रशासन','/society/health'],agriculture:['कृषि संबंधी राज्य नीतियों और संस्थाओं का प्रशासन','/geography/agriculture'],
+ 'water-resources':['जल संसाधन और सिंचाई परियोजनाओं का विभागीय संदर्भ','/geography/water-systems'],'road-construction':['सड़कों और पुलों का विभागीय निर्माण संदर्भ','/economy/transport'],'rural-development':['ग्रामीण विकास कार्यक्रम और प्रखंड-स्तरीय क्रियान्वयन','/governance/block'],'urban-development':['नगर निकाय, नगरीय योजना और आवास का संस्थागत संदर्भ','/governance/urban-local-bodies'],industries:['औद्योगिक संस्थाओं और राज्य औद्योगिक नीति का प्रशासन','/economy/industry'],tourism:['पर्यटन स्थलों और पर्यटन संस्थाओं का विभागीय संदर्भ','/tourism'],'art-culture':['कला, संस्कृति और संबंधित सार्वजनिक संस्थाएँ','/culture'],environment:['वन, पर्यावरण और संरक्षण का विभागीय संदर्भ','/geography/ecology'],'revenue-land':['राजस्व प्रशासन और भूमि अभिलेख का संस्थागत संदर्भ','/governance/public-services']
+};
+export const departmentDirectory=departments.map(item=>makeRecord('department-reference',item.slug,item.nameHi,item.nameEn,responsibilities[item.id][0],['bihar'],{route:`/governance/departments#${item.slug}`,canonicalEntityRef:`governance-department:${item.id}`,category:item.category,currentDataRef:`governance-department-${item.id}`,relatedRoute:responsibilities[item.id][1],relatedServices:item.relatedServices,relatedInstitutions:item.relatedInstitutions}));
+const service=(slug,hi,en,summary,sourceIds,channel=null)=>makeRecord('service-topic',slug,hi,en,summary,sourceIds,{route:`/governance/public-services#${slug}`,channel});
+export const serviceTopics=[
+ service('certificates','जाति, आय और निवास प्रमाणपत्र','Caste income and residence certificates','प्रमाणपत्र संबंधित प्रशासनिक तथ्य का अभिलेख है। पात्रता, दस्तावेज, सक्षम अधिकारी और आवेदन का रास्ता सेवा-विशिष्ट होता है। किसी अन्य व्यक्ति के दस्तावेज इस पोर्टल पर न भेजें।',['bihar'],'rtps'),
+ service('civil-registration','जन्म और मृत्यु का पंजीकरण','Birth and death registration','नागरिक पंजीकरण और प्रमाणपत्र के लिए संबंधित स्थानीय पंजीयक की प्रक्रिया लागू होती है। घटना, विलंब और अभिलेख-सुधार अलग प्रक्रियाएँ हो सकती हैं।',['indiaCode','bihar']),
+ service('land-records','भूमि अभिलेख और दाखिल-खारिज','Land records and mutation','जमाबंदी/राजस्व अभिलेख, पंजीकृत दस्तावेज और स्वामित्व-विवाद अलग विषय हैं। ऑनलाइन प्रविष्टि या दाखिल-खारिज को अपने आप अंतिम स्वामित्व-निर्णय न समझें।',['indiaCode','bihar'],'land-record-services'),
+ service('ration','राशन से जुड़ी सेवाएँ','Ration related services','कार्ड, परिवार-प्रविष्टि, पात्रता और वितरण-शिकायत अलग कार्य हैं। संबंधित खाद्य एवं उपभोक्ता विभाग की वर्तमान सेवा सूची देखें। लाभ मिलने का वादा इस पोर्टल पर नहीं किया जाता।',['bihar']),
+ service('pensions','पेंशन और कल्याण आवेदन','Pension and welfare applications','योजना की पात्रता, आयु, आय, दस्तावेज और जिम्मेदार विभाग अलग हो सकते हैं। पुरानी योजना के नाम या दर को वर्तमान अधिकार की पुष्टि न मानें।',['bihar']),
+ service('rti','सूचना का अधिकार','Right to Information','RTI सार्वजनिक प्राधिकरण के पास उपलब्ध सूचना माँगने का कानून-आधारित रास्ता है। यह शिकायत के निवारण का समानार्थी नहीं। अपवाद, शुल्क, अपील और समय-सीमा लागू अधिनियम से पढ़ें।',['indiaCode'],'right-to-information'),
+ service('grievances','लोक शिकायत','Public grievances','शिकायत में सेवा या प्रशासनिक कार्यवाही से जुड़ी समस्या दर्ज की जाती है। पावती और संदर्भ संख्या संभालें; शिकायत दर्ज करना वांछित परिणाम की गारंटी नहीं।',['bihar'],'public-grievance'),
+ service('voter-services','मतदाता और निर्वाचन सेवाएँ','Voter and election services','नामावली में नाम, प्रविष्टि-सुधार और आवेदन के लिए ECI/CEO संसाधन देखें। स्थानीय निकाय की सूची और विधानसभा की सूची को बिना नियम देखे एक जैसा न मानें।',['voters','ceo','sec'])
+];
+export const civicKnowledge=makePage('civic-knowledge','नागरिक ज्ञान','Civic knowledge','अधिकार, कर्तव्य, सार्वजनिक अभिलेख, बजट और लोकतांत्रिक प्रक्रियाओं का शैक्षणिक परिचय।',['constitution','indiaCode','voters','assembly'],[
+ section('अधिकार और कर्तव्य','संविधान के भाग III में मौलिक अधिकार और भाग IVA में मूल कर्तव्यों का संदर्भ है। अधिकारों की शर्तें, उचित प्रतिबंध और उपचार संदर्भ-विशिष्ट हो सकते हैं। यह कानूनी सलाह नहीं है।'),
+ section('सूचना और शिकायत में अंतर','RTI रिकॉर्ड तक पहुँच का मार्ग है; शिकायत किसी सेवा या प्रशासनिक कार्रवाई के निवारण की माँग है। दोनों का उद्देश्य, अधिकारी और अपील-पद्धति अलग हो सकते हैं। सार्वजनिक दस्तावेज साझा करते समय व्यक्तिगत संवेदनशील जानकारी की रक्षा करें।'),
+ section('सरकारी बजट कैसे पढ़ें','बजट अनुमान, संशोधित अनुमान और वास्तविक खर्च अलग हैं। राज्य की कुल राशि को किसी एक जिले में खर्च मान लेना गलत है। वर्ष, लेखा-शीर्ष, इकाई और दस्तावेज साथ पढ़ें।'),
+ section('कानून और सार्वजनिक परामर्श','विधेयक कानून का प्रस्ताव है; लागू अधिनियम और अधिसूचना उससे अलग चरण हैं। जहाँ सार्वजनिक परामर्श आमंत्रित हो वहाँ प्रकाशित मसौदा, अंतिम तिथि और जमा करने का आधिकारिक माध्यम देखें। हर विधेयक के लिए समान परामर्श प्रक्रिया मानकर न चलें।'),
+ section('चुनाव और पारदर्शिता','मतदाता पंजीकरण, उम्मीदवार के शपथपत्र, घोषित परिणाम और सदन के प्रश्न/समिति रिपोर्ट सार्वजनिक जानकारी के अलग स्रोत हैं। निर्वाचन अवधि में लागू आचार संहिता और आयोग के निर्देश आधिकारिक स्रोत से पढ़ें।')
+],{route:'/governance/civic-knowledge',aliases:['citizen rights','RTI','नागरिक अधिकार','नागरिक कर्तव्य']});
+export {publicServices};

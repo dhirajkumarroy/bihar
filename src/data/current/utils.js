@@ -1,7 +1,7 @@
 import {freshnessPolicies} from './config';
 
 const dateOnly=/^\d{4}-\d{2}-\d{2}$/;
-export function parseCurrentDate(value){if(value instanceof Date&&!Number.isNaN(value.getTime()))return new Date(Date.UTC(value.getUTCFullYear(),value.getUTCMonth(),value.getUTCDate()));if(typeof value!=='string'||!dateOnly.test(value))return null;const date=new Date(`${value}T00:00:00Z`);return date.toISOString().slice(0,10)===value?date:null}
+export function parseCurrentDate(value){if(value instanceof Date&&!Number.isNaN(value.getTime()))return new Date(Date.UTC(value.getUTCFullYear(),value.getUTCMonth(),value.getUTCDate()));if(typeof value!=='string'||!dateOnly.test(value))return null;const date=new Date(`${value}T00:00:00Z`);return !Number.isNaN(date.getTime())&&date.toISOString().slice(0,10)===value?date:null}
 export function dateKey(value){const date=parseCurrentDate(value);return date?date.toISOString().slice(0,10):null}
 export function daysSinceVerification(record,referenceDate=new Date()){const from=parseCurrentDate(record?.lastVerified),to=parseCurrentDate(referenceDate);return from&&to?Math.round((to-from)/86400000):null}
 export function policyFor(record,policies=freshnessPolicies){return typeof record?.freshnessPolicy==='object'?record.freshnessPolicy:policies[record?.freshnessPolicy]}

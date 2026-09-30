@@ -1,8 +1,30 @@
-import {useMemo,useState} from 'react';import {Search} from 'lucide-react';import {Link} from 'react-router-dom';import {districts} from '../data/districts';import {deepDistricts} from '../data/districts/index';import {destinations,categoryLabels} from '../data/tourism/index.js';import {historyPeriods,ancientPages,magadhaPages,mauryaPages,h5Pages,h6Pages,h7Pages,h8Pages} from '../data/history';import {personalities} from '../data/catalog';import {posts} from '../data/blogs';import {cultureSearchByQuery} from '../data/cultureSearch';import {riverDirectory,naturalRegions,geographySystems} from '../data/geography';import {waterSearchRecords} from '../data/geography/waterSystems';import {ecologySearchRecords} from '../data/geography/ecology';import {agricultureSearchRecords} from '../data/geography/agriculture';import {economySearchRecords} from '../data/economy';import {societySearchRecords} from '../data/society';import {governanceSearchRecords} from '../data/governance';import {SEO,PageHero,EmptyState} from '../components/Portal';
-const deepPages=[...ancientPages,...magadhaPages,...mauryaPages,...h5Pages,...h6Pages,...h7Pages,...h8Pages],deepRoutes=new Set(deepPages.map(x=>`/history/${x.slug}`));
-const historySearch=[...deepPages.map(x=>({name:x.shortTitle,to:`/history/${x.slug}`,category:x.eyebrow,text:`${x.title} ${x.englishTitle} ${x.aliases.join(' ')} ${x.description}`})),...historyPeriods.filter(x=>!deepRoutes.has(x.route)).map(x=>({...x,name:x.titleHindi,to:x.route||`/history#${x.id}`,category:x.displayPeriod,text:`${x.titleHindi} ${x.titleEnglish} ${x.displayPeriod} ${x.importantPeople.join(' ')} ${x.importantPlaces.join(' ')} ${x.keywords.join(' ')} ${x.summary}`}))];
-const districtAliases=new Map(deepDistricts.map(x=>[x.slug,x.aliases||[]]));
-const geographySearch=[...riverDirectory.map(x=>({id:`river-${x.slug}`,name:x.nameHi,to:`/geography/rivers/${x.slug}`,category:'नदी',text:`${x.nameHi} ${x.nameEn} ${x.aliases.join(' ')} ${x.districts.join(' ')} ${x.summary}`})),...naturalRegions.map(x=>({id:`region-${x.slug}`,name:x.nameHi,to:`/geography/natural-regions/${x.slug}`,category:'प्राकृतिक क्षेत्र',text:`${x.nameHi} ${x.nameEn} ${x.type} ${x.districts.join(' ')} ${x.summary}`})),...Object.values(geographySystems).filter(x=>x.slug!=='natural-regions').map(x=>({id:`geography-${x.slug}`,name:x.nameHi,to:`/geography/${x.slug}`,category:'भूगोल',text:`${x.nameHi} ${x.summary}`}))];
-const governanceSearch=governanceSearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category} ${x.summary||''}`}));
-const staticGroups=[['शासन',governanceSearch],['समाज',societySearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category} ${x.summary||''}`}))],['अर्थव्यवस्था',economySearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category} ${x.summary||''}`}))],['कृषि',agricultureSearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category} ${x.summary||''}`}))],['पारिस्थितिकी',ecologySearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category}`}))],['जल तंत्र',waterSearchRecords.map(x=>({...x,text:`${x.name} ${(x.aliases||[]).join(' ')} ${x.category}`}))],['भूगोल',geographySearch],['जिले',districts.map(x=>({...x,name:x.nameHindi,to:`/district/${x.slug}`,text:`${x.nameHindi} ${x.nameEnglish} ${x.famousFor} ${(districtAliases.get(x.slug)||[]).join(' ')}`}))],['इतिहास',historySearch],['पर्यटन',destinations.map(x=>({...x,name:x.nameHi,to:`/tourism/${x.slug}`,category:x.categories.map(c=>categoryLabels[c]).join(' · '),text:`${x.nameHi} ${x.nameEn} ${x.district} ${x.aliases.join(' ')}`}))],['व्यक्तित्व',personalities.map(x=>({...x,to:`/personalities/${x.slug}`,text:`${x.name} ${x.role}`}))],['लेख',posts.map(x=>({...x,name:x.title,to:`/blog/${x.slug}`,text:`${x.title} ${x.excerpt} ${x.tags}`}))]];
-export default function SearchPage(){const [q,setQ]=useState('');const results=useMemo(()=>{if(!q.trim())return[];const cultural=cultureSearchByQuery(q),groups=staticGroups.map(([g,data])=>[g,data.filter(x=>x.text.toLocaleLowerCase('hi').includes(q.toLocaleLowerCase('hi')))]).filter(x=>x[1].length);return cultural.length?[['संस्कृति, भाषा, पर्व और भोजन',cultural.map(x=>({...x,category:x.label}))],...groups]:groups},[q]);return <main><SEO title="खोज" description="बिहार के इतिहास, जिलों, पर्यटन, संस्कृति, भाषा, पर्व और भोजन की एकीकृत खोज।" canonicalPath="/search"/><PageHero eyebrow="सम्पूर्ण बिहार" title="ज्ञान खोजें" description="हिंदी, English नाम और प्रचलित aliases से canonical विषय खोजें—duplicate cards के बिना।"/><section className="search-page"><label><Search/><input autoFocus value={q} onChange={e=>setQ(e.target.value)} placeholder="जैसे—Madhubani Painting, मैथिली, Silaw Khaja…"/></label>{q&&!results.length&&<EmptyState title="कोई परिणाम नहीं मिला" description="दूसरा नाम, हिंदी/English spelling या छोटा शब्द आज़माएँ।"/>}{results.map(([g,items])=><div className="result-group" key={g}><h2>{g} <span>{items.length}</span></h2>{items.map(x=><Link to={x.to} key={x.id||x.to}><b>{x.name}</b><small>{x.category||x.era||x.role||''}</small></Link>)}</div>)}</section></main>}
+import {useMemo} from 'react';
+import {Link,useSearchParams} from 'react-router-dom';
+import {Search} from 'lucide-react';
+import {searchPortal} from '../data/searchIndex';
+import {SEO,PageHero,EmptyState} from '../components/Portal';
+
+const suggestedLinks=[['इतिहास','/history'],['जिले','/districts'],['पर्यटन','/tourism'],['संस्कृति','/culture'],['भूगोल','/geography']];
+
+export default function SearchPage(){
+  const [searchParams,setSearchParams]=useSearchParams();
+  const query=searchParams.get('q')||'';
+  const results=useMemo(()=>searchPortal(query),[query]);
+  const updateQuery=value=>{
+    const next=value.trim()?{q:value}:{};
+    setSearchParams(next,{replace:true});
+  };
+  return <main>
+    <SEO title="खोज" description="बिहार के इतिहास, जिलों, पर्यटन, संस्कृति, भाषा, भोजन, भूगोल और शासन की एकीकृत खोज।" canonicalPath="/search" noIndex/>
+    <PageHero eyebrow="सम्पूर्ण बिहार" title="ज्ञान खोजें" description="हिंदी, English नाम और प्रचलित aliases से एक canonical विषय तक पहुँचें।"/>
+    <section className="search-page" aria-labelledby="search-results-heading">
+      <form role="search" onSubmit={event=>event.preventDefault()}>
+        <label className="search-page__field"><Search aria-hidden="true"/><span className="sr-only">सम्पूर्ण बिहार में खोजें</span><input autoFocus value={query} onChange={event=>updateQuery(event.target.value)} placeholder="जैसे—Madhubani Painting, मैथिली, Silaw Khaja…"/></label>
+      </form>
+      {!query&&<div className="search-page__suggestions"><p>इन विषयों से शुरू करें:</p>{suggestedLinks.map(([label,to])=><Link key={to} to={to}>{label}</Link>)}</div>}
+      {!!query&&<p id="search-results-heading" className="search-page__count" aria-live="polite">“{query}” के लिए {results.length} परिणाम</p>}
+      {!!query&&!results.length&&<EmptyState title="इस खोज के लिए कोई परिणाम नहीं मिला" description="दूसरी वर्तनी आज़माएँ, हिंदी या English नाम से खोजें, या नीचे के मुख्य विषयों में जाएँ।" action={<div className="search-page__suggestions">{suggestedLinks.map(([label,to])=><Link key={to} to={to}>{label}</Link>)}</div>}/>}
+      <ol className="search-results">{results.map(item=><li key={item.id}><Link to={item.to}><div><small>{item.type}{item.region?` · ${item.region}`:''}</small><h2>{item.title}</h2><p>{item.description||'सम्पूर्ण बिहार का संदर्भित विषय।'}</p></div><span aria-hidden="true">→</span></Link></li>)}</ol>
+    </section>
+  </main>;
+}

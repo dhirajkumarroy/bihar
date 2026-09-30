@@ -1,0 +1,7 @@
+export const evidenceLabels={fact:'तथ्य · FACT',position:'दल का आधिकारिक पक्ष · OFFICIAL POSITION',historical:'ऐतिहासिक अभिलेख · HISTORICAL RECORD',reported:'स्रोत के अनुसार · SOURCE-REPORTED',current:'बदलती जानकारी · CURRENT DATA',disputed:'विवादित / CONTESTED',analysis:'विश्लेषण · ANALYSIS'};
+export const makeRecord=(type,slug,nameHi,nameEn,summary,sourceIds,extra={})=>({id:`${type}-${slug}`,slug,type,nameHi,nameEn,summary,sourceIds,aliases:[],evidence:'fact',related:[],...extra});
+export const makePage=(slug,nameHi,nameEn,summary,sourceIds,sections=[],extra={})=>makeRecord('topic',slug,nameHi,nameEn,summary,sourceIds,{sections,route:slug?`/politics/${slug}`:'/politics',...extra});
+export const normalized=value=>String(value||'').normalize('NFKC').toLocaleLowerCase('hi').replace(/[()’'.,-]/g,' ').replace(/\s+/g,' ').trim();
+export const matchesQuery=(record,query)=>{const terms=normalized(query).split(' ').filter(Boolean),text=normalized([record.nameHi,record.nameEn,record.abbreviation,...(record.aliases||[]),record.number,record.summary].join(' '));return terms.every(term=>text.includes(term));};
+export const recordSEO=record=>({title:`${record.nameHi} — बिहार राजनीतिक ज्ञान`,description:record.summary,canonical:record.route});
+export const coverageNote='यह स्रोत-आधारित ज्ञान-संग्रह है, भारत या बिहार के सभी पंजीकृत दलों, उम्मीदवारों और प्रत्येक ऐतिहासिक चुनाव का पूर्ण रजिस्टर नहीं। अनुपलब्ध आँकड़े शून्य नहीं हैं।';

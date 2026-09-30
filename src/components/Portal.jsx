@@ -2,27 +2,29 @@ import {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {ArrowRight,ChevronRight,BookOpen,MapPin,ExternalLink} from 'lucide-react';
 import {Card,Badge,ActionLink,EmptyState as SharedEmptyState} from './ui';
+import {siteConfig} from '../siteConfig';
 
-export function SEO({title,description,type='website',canonicalPath,image='/assets/bihar-hero.png',keywords,schema={}}){
+export function SEO({title,description,type='website',canonicalPath,image='/assets/bihar-hero.png',imageAlt='',keywords,schema={},noIndex=false,lang='hi',exactTitle=false,inferPerson=true}){
  useEffect(()=>{
-  const desc=description||`${title} — सम्पूर्ण बिहार पोर्टल पर प्रामाणिक जानकारी।`,origin=location.origin,normalizedPath=location.pathname.replace(/^\/districts\//,'/district/'),url=canonicalPath?`${origin}${canonicalPath}`:`${origin}${normalizedPath}`,imageUrl=image.startsWith('http')?image:`${origin}${image}`;
+  const desc=description||`${title} — सम्पूर्ण बिहार पोर्टल पर प्रामाणिक जानकारी।`,origin=siteConfig.url,normalizedPath=location.pathname.replace(/^\/districts\//,'/district/'),url=canonicalPath?`${origin}${canonicalPath}`:`${origin}${normalizedPath}`,imageUrl=image.startsWith('http')?image:`${origin}${image}`;
   const personSlugs=['chandragupta-maurya','chanakya','bindusara','ashoka','aryabhata','xuanzang','yijing','bakhtiyar-khalji','sher-shah-suri','veer-kunwar-singh','gandhi-in-bihar','rajendra-prasad'];
-  const inferredPerson=location.pathname.startsWith('/personalities/')||personSlugs.some(slug=>location.pathname===`/history/${slug}`),effectiveType=inferredPerson?'person':type;
+  const inferredPerson=inferPerson&&(location.pathname.startsWith('/personalities/')||personSlugs.some(slug=>location.pathname===`/history/${slug}`)),effectiveType=inferredPerson?'person':type;
   const schemaType=effectiveType==='person'?'Person':effectiveType==='article'?'Article':effectiveType==='place'?'Place':'WebPage',openGraphType=effectiveType==='person'?'profile':effectiveType==='article'?'article':'website';
-  const fullTitle=title.includes('सम्पूर्ण बिहार')?title:`${title} | सम्पूर्ण बिहार`;
+  const fullTitle=exactTitle||title.includes('सम्पूर्ण बिहार')?title:`${title} | सम्पूर्ण बिहार`;
   document.title=fullTitle;
-  document.documentElement.lang='hi';
-  const set=(selector,attr,value)=>{let el=document.head.querySelector(selector);if(!el){el=document.createElement('meta');document.head.appendChild(el)}el.setAttribute(attr,value)};
+  document.documentElement.lang=lang;
+  const set=(selector,attr,value)=>{let el=document.head.querySelector(selector);if(!el){el=document.createElement('meta');const identity=selector.match(/\[(name|property)="([^"]+)"\]/);if(identity)el.setAttribute(identity[1],identity[2]);document.head.appendChild(el)}el.setAttribute(attr,value)};
   set('meta[name="description"]','content',desc);
-  set('meta[name="robots"]','content','index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
-  if(keywords)set('meta[name="keywords"]','content',keywords);
+  set('meta[name="robots"]','content',noIndex?'noindex, follow':'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+  set('meta[name="keywords"]','content',keywords||'');
   set('meta[property="og:title"]','content',fullTitle);
   set('meta[property="og:description"]','content',desc);
   set('meta[property="og:type"]','content',openGraphType);
   set('meta[property="og:url"]','content',url);
   set('meta[property="og:image"]','content',imageUrl);
+  if(imageAlt){set('meta[property="og:image:alt"]','content',imageAlt);set('meta[name="twitter:image:alt"]','content',imageAlt);}else{document.querySelector('meta[property="og:image:alt"]')?.remove();document.querySelector('meta[name="twitter:image:alt"]')?.remove();}
   set('meta[property="og:site_name"]','content','सम्पूर्ण बिहार — Bihar Portal');
-  set('meta[property="og:locale"]','content','hi_IN');
+  set('meta[property="og:locale"]','content',lang==='en'?'en_IN':'hi_IN');
   set('meta[name="twitter:card"]','content','summary_large_image');
   set('meta[name="twitter:title"]','content',fullTitle);
   set('meta[name="twitter:description"]','content',desc);
@@ -30,9 +32,9 @@ export function SEO({title,description,type='website',canonicalPath,image='/asse
   let canonical=document.querySelector('link[rel="canonical"]');if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}canonical.href=url;
   let json=document.querySelector('#page-schema');if(!json){json=document.createElement('script');json.id='page-schema';json.type='application/ld+json';document.head.appendChild(json)}
   json.textContent=JSON.stringify({'@context':'https://schema.org','@type':schemaType,name:fullTitle,description:desc,url,image:imageUrl,inLanguage:'hi',publisher:{'@type':'Organization',name:'सम्पूर्ण बिहार',url:origin,logo:{'@type':'ImageObject',url:`${origin}/assets/bihar-districts-heritage.svg`}},...schema});
- },[title,description,type,canonicalPath,image,keywords,schema]);return null
+ },[title,description,type,canonicalPath,image,imageAlt,keywords,schema,noIndex,lang,exactTitle,inferPerson]);return null
 }
-export function Breadcrumbs({items=[]}){useEffect(()=>{let el=document.querySelector('#breadcrumb-schema');if(!el){el=document.createElement('script');el.id='breadcrumb-schema';el.type='application/ld+json';document.head.appendChild(el)}const origin=location.origin;el.textContent=JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{position:1,name:'मुखपृष्ठ',item:`${origin}/`},...items.map((x,i)=>({position:i+2,name:x.label,item:x.to?`${origin}${x.to}`:location.href}))].map(x=>({'@type':'ListItem',...x}))});},[items]);return <nav className="breadcrumbs" aria-label="ब्रेडक्रंब"><Link to="/">मुखपृष्ठ</Link>{items.map(x=><span key={x.label}><ChevronRight aria-hidden="true"/>{x.to?<Link to={x.to}>{x.label}</Link>:<b aria-current="page">{x.label}</b>}</span>)}</nav>}
+export function Breadcrumbs({items=[],lang='hi'}){useEffect(()=>{let el=document.querySelector('#breadcrumb-schema');if(!el){el=document.createElement('script');el.id='breadcrumb-schema';el.type='application/ld+json';document.head.appendChild(el)}const origin=siteConfig.url;el.textContent=JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{position:1,name:lang==='en'?'Home':'मुखपृष्ठ',item:`${origin}/`},...items.map((x,i)=>({position:i+2,name:x.label,item:x.to?`${origin}${x.to}`:`${origin}${location.pathname}`}))].map(x=>({'@type':'ListItem',...x}))});},[items,lang]);return <nav className="breadcrumbs" aria-label={lang==='en'?'Breadcrumbs':'ब्रेडक्रंब'}><Link to="/">{lang==='en'?'Home':'मुखपृष्ठ'}</Link>{items.map(x=><span key={x.label}><ChevronRight aria-hidden="true"/>{x.to?<Link to={x.to}>{x.label}</Link>:<b aria-current="page">{x.label}</b>}</span>)}</nav>}
 export function PageHero({eyebrow,title,description,image,children}){return <section className={'page-hero '+(image?'with-image':'')} style={image?{'--page-image':`url(${image})`}:null}><div><span>{eyebrow}</span><h1>{title}</h1><p>{description}</p>{children}</div></section>}
 export function ContentSection({title,children,id}){return <section id={id} className="content-section"><h2>{title}</h2><div>{children}</div></section>}
 export function RelatedContent({title='संबंधित सामग्री',items=[]}){if(!items.length)return null;return <section className="related"><h2>{title}</h2><div>{items.map(x=><Link key={x.title||x.name} to={x.to||'#'}><small>{x.type||'और पढ़ें'}</small><b>{x.title||x.name}</b><ArrowRight/></Link>)}</div></section>}

@@ -41,8 +41,15 @@ addUrl('/economy', '0.8', 'monthly');
 addUrl('/society', '0.8', 'monthly');
 addUrl('/governance', '0.8', 'monthly');
 addUrl('/blog', '0.8', 'weekly');
-addUrl('/search', '0.7', 'weekly');
 addUrl('/about/data-freshness', '0.6', 'monthly');
+addUrl('/about', '0.5', 'monthly');
+addUrl('/contact', '0.4', 'monthly');
+addUrl('/privacy', '0.3', 'yearly');
+addUrl('/cookies', '0.3', 'yearly');
+addUrl('/editorial-policy', '0.4', 'yearly');
+addUrl('/advertising', '0.3', 'yearly');
+addUrl('/disclaimer', '0.3', 'yearly');
+addUrl('/terms', '0.3', 'yearly');
 
 // 2. All 38 Districts
 const { districts } = load('src/data/districts.js', ['districts']);
@@ -76,12 +83,10 @@ if (historyPeriods && Array.isArray(historyPeriods)) {
 }
 
 // 5. Culture Traditions & Festivals
-const { festivals } = load('src/data/catalog.js', ['festivals']);
-if (festivals && Array.isArray(festivals)) {
-  festivals.forEach(f => {
-    if (f.slug) addUrl(`/culture/festivals/${f.slug}`, '0.75', 'monthly');
-  });
-}
+const festivalData=require('./load-data-module.cjs').loadDataModule(path.join(__dirname,'../src/data/festivals/index.js'));
+for(const route of festivalData.festivalRoutes)addUrl(route,'0.75','monthly');
+const religionData=require('./load-data-module.cjs').loadDataModule(path.join(__dirname,'../src/data/religion/index.js'));
+for(const route of religionData.religionRoutes)addUrl(route,'0.75','monthly');
 
 // 6. Food, Languages, Rivers, Personalities from catalog
 const { foods, languages, personalities, rivers } = load('src/data/catalog.js', ['foods', 'languages', 'personalities', 'rivers']);
@@ -124,17 +129,26 @@ addUrl('/economy/sectors', '0.7', 'monthly');
 addUrl('/economy/industry', '0.7', 'monthly');
 addUrl('/economy/infrastructure', '0.7', 'monthly');
 addUrl('/economy/transport', '0.7', 'monthly');
-addUrl('/economy/agriculture', '0.7', 'monthly');
+addUrl('/geography/agriculture', '0.75', 'monthly');
 
 // Compile XML
+// G7 uses actual module imports, including all valid detail routes; no filters/aliases.
+const {loadDataModule}=require('./load-data-module.cjs');
+const {politicsRoutes}=loadDataModule(path.join(__dirname,'../src/data/politics/index.js'));
+for(const route of politicsRoutes)addUrl(route,'0.7','monthly');
+for(const route of ['/governance/state','/governance/district','/governance/block','/governance/panchayati-raj','/governance/urban-local-bodies','/governance/public-services'])addUrl(route,'0.7','monthly');
+// P1: index its real cross-module destinations as well as the existing profile URL.
+// Legacy loaders omit some deep history/tourism records; do not duplicate known URLs.
+const {rajendraPrasad:p1}=loadDataModule(path.join(__dirname,'../src/data/personalities/index.js'));
+const knownPaths=new Set(Array.from(urls).map(s=>new URL(JSON.parse(s).loc).pathname));
+for(const route of [p1.canonical,...p1.sections.flatMap(s=>(s.links||[]).map(([,to])=>to)),...p1.places.map(p=>p.to),...p1.relatedPeople.filter(p=>p.to).map(p=>p.to),'/history/rajendra-prasad']){
+ const clean=route.split('#')[0];if(!knownPaths.has(clean)){addUrl(clean,'0.7','monthly');knownPaths.add(clean);}
+}
 const urlList = Array.from(urls).map(s => JSON.parse(s));
-const today = new Date().toISOString().split('T')[0];
-
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urlList.map(item => `  <url>
     <loc>${item.loc}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>${item.changefreq}</changefreq>
     <priority>${item.priority}</priority>
   </url>`).join('\n')}

@@ -1,7 +1,9 @@
-export const currentDataTypes=['officeholder','project-status','institution-leadership','event-date','visitor-notice','administrative-count','statistic','operational-status','legal-status','designation-status','other-current'];
+export const currentDataTypes=['officeholder','project-status','institution-leadership','event-date','visitor-notice','administrative-count','statistic','operational-status','legal-status','designation-status','other-current','member-roster','party-representation','government-formation','alliance-status','election-notice','boundary-status','party-recognition','directory-link'];
 export const currentRecordStatuses=['current','scheduled','expired','superseded','unverified','archived'];
 
 export const freshnessPolicies={
+ 'political-status-14':{id:'political-status-14',label:'राजनीतिक वर्तमान स्थिति',maxAgeDays:14,dueSoonRatio:.2,staleBehavior:'fallback'},
+ 'directory-link-90':{id:'directory-link-90',label:'विभाग / सेवा लिंक',maxAgeDays:90,dueSoonRatio:.2,staleBehavior:'fallback'},
  'officeholder-30':{id:'officeholder-30',label:'पदाधिकारी',maxAgeDays:30,dueSoonRatio:.2,staleBehavior:'fallback'},
  'project-status-90':{id:'project-status-90',label:'परियोजना स्थिति',maxAgeDays:90,dueSoonRatio:.2,staleBehavior:'show-stale-warning'},
  'operational-status-90':{id:'operational-status-90',label:'संचालन स्थिति',maxAgeDays:90,dueSoonRatio:.2,staleBehavior:'show-stale-warning'},
@@ -18,13 +20,14 @@ export const currentDataOwnership=[
  {module:'G4 Agriculture',class:'D',rule:'स्थिर farming context; prices/advisories नहीं।'},
  {module:'G5 Economy',class:'B/C',rule:'परियोजना, airport operational status और latest-known markers central registry में।'},
  {module:'G6 Society',class:'D',rule:'Census और dated human-development series स्थिर रहते हैं।'},
- {module:'G7 Institutions',class:'C',rule:'भविष्य के leadership records central registry में; अभी कोई record नहीं।'},
+ {module:'G7 Politics',class:'A/C',rule:'पदाधिकारी, सदस्य-सूची, दल मान्यता, गठबंधन, निर्वाचन सूचना और सीमा स्थिति central registry में; अपुष्ट मूल्य नहीं दिखते।'},
  {module:'G8 Governance',class:'A/B',rule:'Governor/Chief Minister officeholder and administrative counts central registry में।'},
  {module:'Tourism',class:'E',rule:'केवल dated official visitor notices; initial registry intentionally empty।'},
  {module:'Festivals',class:'E',rule:'Officially published event dates only; seasonal context stable module में।'}
 ];
 
 export const currentEntityKeys={
+ politics:['council-of-ministers','deputy-speaker','opposition-leader','assembly-members','council-members','lok-sabha-members','rajya-sabha-members','party-representation','government-formation','alliances','election-notices','local-elections','delimitation','institution-updates'],
  administration:['subdivisions','blocks'],
  statistic:['gsdp-current-2023-24','pcgsdp-current-2023-24'],
  event:['chhath']

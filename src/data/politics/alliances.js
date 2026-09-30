@@ -1,0 +1,5 @@
+import {makeRecord} from './model';
+export const alliances=[
+ makeRecord('alliance-event','nda-2025','NDA — विधानसभा चुनाव 2025','NDA — Bihar Assembly election 2025','AP की 14 नवंबर 2025 रिपोर्ट के अनुसार NDA को 202 सीटें मिलीं। रिपोर्ट BJP, JD(U) और LJP (रामविलास) को गठबंधन सहयोगियों में गिनती है; यह नीचे दिए दलों की पूर्ण गठबंधन-सूची होने का दावा नहीं।',['alliance2025','result2025'],{year:2025,date:'2025-11-14',evidence:'reported',partyIds:['bjp','jdu','ljp-ram-vilas'],partyListComplete:false,seatsWon:202,seatsContested:null,electionId:'assembly-2025',route:'/politics/alliances#nda-2025'}),
+ makeRecord('alliance-event','opposition-2025','विपक्षी गठबंधन — 2025 का संदर्भ','Opposition alliance — 2025 context','उसी दिन की AP रिपोर्ट RJD और कांग्रेस के साथ अन्य दलों के गठबंधन का उल्लेख करती है। यहाँ पूरी सदस्य-सूची या सीट-बँटवारा संकलित नहीं है।',['alliance2025'],{year:2025,date:'2025-11-14',evidence:'reported',partyIds:['rjd','inc'],partyListComplete:false,seatsWon:null,seatsContested:null,electionId:'assembly-2025',route:'/politics/alliances#opposition-2025'})
+];

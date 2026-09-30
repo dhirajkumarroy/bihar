@@ -24,7 +24,7 @@ for(const slug of ['bagmati','kamla-balan'])if(!/कोसी|Kosi/i.test(bySlug
 if(/आधुनिक गंडक की शाखा/.test(bySlug['burhi-gandak']?.courseSummary||''))errors.push('Burhi Gandak incorrectly described as a modern Gandak branch');
 if(/Sorrow of Bihar/i.test(dataText))errors.push('sensational Kosi label remains');
 for(const field of ['currentDischarge','liveWaterLevel','currentFloodAlert'])if(dataText.includes(field))errors.push(`volatile field embedded: ${field}`);
-const componentText=read('src/components/geography/GeographyModule.jsx'),routeText=read('src/App.jsx'),searchText=read('src/pages/SearchPage.jsx');
+const componentText=read('src/components/geography/GeographyModule.jsx'),routeText=read('src/App.jsx'),searchText=read('src/data/searchIndex.js');
 for(const name of ['GeographyHero','GeographyQuickFacts','PhysicalRegionCard','PhysicalRegionComparison','RiverCard','RiverProfile','RiverSystemDiagram','RiverTerminologyNote','BasinExplanation','ClimateProfile','SeasonCycle','SoilProfile','WetlandCard','ForestLandscapeCard','GeographyGlossary','MapSourceNote','RelatedDistricts','RelatedTourism'])if(!componentText.includes(`function ${name}`))errors.push(`missing component ${name}`);
 for(const route of ['/geography/rivers/:slug','/geography/natural-regions/:slug','/geography/:slug'])if(!routeText.includes(route))errors.push(`missing route ${route}`);
 for(const token of ['riverDirectory','naturalRegions','geographySystems'])if(!searchText.includes(token))errors.push(`global search missing ${token}`);

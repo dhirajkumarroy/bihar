@@ -11,7 +11,19 @@ export function FreshnessBadge({record,referenceDate}){const state=getFreshnessS
 export function LastVerified({record}){return record?.lastVerified?<small className="current-last-verified">अंतिम सत्यापन: {hindiDate(record.lastVerified)}</small>:null}
 export function CurrentSource({record}){const source=record?.source;if(!source?.url)return null;return <a className="current-source" href={source.url} target="_blank" rel="noreferrer">स्रोत: {source.title}<ExternalLink size={13}/></a>}
 
-export function CurrentDataCard({record,title,children,referenceDate,showWhenUnavailable=false}){if(!record)return showWhenUnavailable?<CurrentDataNotice compact/>:null;const state=getFreshnessState(record,referenceDate),policy=policyFor(record);if(state==='stale'&&policy?.staleBehavior==='hide')return null;return <aside className={`current-data-card current-state-${state}`} aria-live="polite"><div className="current-data-top"><div><small>वर्तमान जानकारी</small><h3>{title||'सत्यापित स्थिति'}</h3></div><FreshnessBadge record={record} referenceDate={referenceDate}/></div>{children}{state==='stale'&&<p className="current-warning">यह जानकारी पुरानी है; इसे live स्थिति न मानें और आधिकारिक स्रोत से पुनः जाँचें।</p>}{state==='unverified'&&<p className="current-warning">{record.notes||currentDataMethodology.unavailableMessage}</p>}<div className="current-data-meta"><LastVerified record={record}/><CurrentSource record={record}/></div></aside>}
+export function CurrentDataCard({record,title,children,referenceDate,showWhenUnavailable=false}){
+ if(!record)return showWhenUnavailable?<CurrentDataNotice compact/>:null;
+ const state=getFreshnessState(record,referenceDate),policy=policyFor(record),fresh=['verified','due-soon'].includes(state);
+ const withheld=!fresh&&(policy?.staleBehavior==='fallback'||state==='unverified');
+ if(state==='stale'&&policy?.staleBehavior==='hide')return null;
+ return <aside className={`current-data-card current-state-${state}`}>
+  <div className="current-data-top"><div><small>{fresh?'वर्तमान जानकारी · CURRENT':state==='archived'||state==='expired'?'अभिलेख · ARCHIVE':'वर्तमान स्थिति की जाँच · CURRENT DATA'}</small><h3>{title||record.name||'सत्यापित स्थिति'}</h3></div><FreshnessBadge record={record} referenceDate={referenceDate}/></div>
+  {withheld?<p className="current-warning">वर्तमान स्थिति सत्यापित नहीं है; मूल्य प्रदर्शित नहीं किया गया।</p>:children}
+  {state==='stale'&&<p className="current-warning">यह जानकारी पुरानी है; इसे live स्थिति न मानें और आधिकारिक स्रोत से पुनः जाँचें।</p>}
+  {record.notes&&<p className="current-warning">{record.notes}</p>}
+  <div className="current-data-meta"><LastVerified record={record}/>{!record.lastVerified&&<small>अंतिम सत्यापन: उपलब्ध नहीं</small>}<CurrentSource record={record}/></div>
+ </aside>;
+}
 
 export function CurrentDataNotice({compact=false}){return <aside className={`current-data-notice${compact?' compact':''}`}><Info/><div><b>स्थिर ज्ञान और वर्तमान जानकारी अलग हैं</b><p>पद, समय-सारणी, operational status और administrative counts बदल सकते हैं। केवल स्रोत, अंतिम-सत्यापन और freshness state वाले records को current माना जाता है।</p>{!compact&&<Link to="/about/data-freshness">डेटा freshness नीति देखें <ExternalLink size={13}/></Link>}</div></aside>}
 export function StaleDataNotice(){return <aside className="current-data-notice stale"><AlertTriangle/><div><b>पुनः सत्यापन आवश्यक</b><p>दिया गया record अपनी freshness window पार कर चुका है। इसे संदर्भ के रूप में रखें, आज की स्थिति के रूप में नहीं।</p></div></aside>}

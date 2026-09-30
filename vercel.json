@@ -1,0 +1,449 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/festivals",
+      "destination": "/festivals/index.html"
+    },
+    {
+      "source": "/festivals/religious",
+      "destination": "/festivals/religious/index.html"
+    },
+    {
+      "source": "/festivals/fairs",
+      "destination": "/festivals/fairs/index.html"
+    },
+    {
+      "source": "/festivals/seasonal",
+      "destination": "/festivals/seasonal/index.html"
+    },
+    {
+      "source": "/festivals/chhath-puja",
+      "destination": "/festivals/chhath-puja/index.html"
+    },
+    {
+      "source": "/festivals/sonepur-mela",
+      "destination": "/festivals/sonepur-mela/index.html"
+    },
+    {
+      "source": "/festivals/pitrapaksha-mela",
+      "destination": "/festivals/pitrapaksha-mela/index.html"
+    },
+    {
+      "source": "/festivals/sama-chakeva",
+      "destination": "/festivals/sama-chakeva/index.html"
+    },
+    {
+      "source": "/festivals/jitiya",
+      "destination": "/festivals/jitiya/index.html"
+    },
+    {
+      "source": "/festivals/holi",
+      "destination": "/festivals/holi/index.html"
+    },
+    {
+      "source": "/festivals/madhushravani",
+      "destination": "/festivals/madhushravani/index.html"
+    },
+    {
+      "source": "/festivals/bihula-bishari",
+      "destination": "/festivals/bihula-bishari/index.html"
+    },
+    {
+      "source": "/festivals/makar-sankranti",
+      "destination": "/festivals/makar-sankranti/index.html"
+    },
+    {
+      "source": "/festivals/durga-puja",
+      "destination": "/festivals/durga-puja/index.html"
+    },
+    {
+      "source": "/festivals/diwali",
+      "destination": "/festivals/diwali/index.html"
+    },
+    {
+      "source": "/festivals/saraswati-puja",
+      "destination": "/festivals/saraswati-puja/index.html"
+    },
+    {
+      "source": "/festivals/mahashivratri",
+      "destination": "/festivals/mahashivratri/index.html"
+    },
+    {
+      "source": "/festivals/ram-navami",
+      "destination": "/festivals/ram-navami/index.html"
+    },
+    {
+      "source": "/festivals/teej",
+      "destination": "/festivals/teej/index.html"
+    },
+    {
+      "source": "/festivals/buddha-purnima",
+      "destination": "/festivals/buddha-purnima/index.html"
+    },
+    {
+      "source": "/festivals/mahavir-jayanti",
+      "destination": "/festivals/mahavir-jayanti/index.html"
+    },
+    {
+      "source": "/festivals/guru-gobind-singh-jayanti",
+      "destination": "/festivals/guru-gobind-singh-jayanti/index.html"
+    },
+    {
+      "source": "/festivals/eid-ul-fitr",
+      "destination": "/festivals/eid-ul-fitr/index.html"
+    },
+    {
+      "source": "/festivals/eid-ul-adha",
+      "destination": "/festivals/eid-ul-adha/index.html"
+    },
+    {
+      "source": "/festivals/muharram",
+      "destination": "/festivals/muharram/index.html"
+    },
+    {
+      "source": "/festivals/christmas",
+      "destination": "/festivals/christmas/index.html"
+    },
+    {
+      "source": "/festivals/rajgir-mahotsav",
+      "destination": "/festivals/rajgir-mahotsav/index.html"
+    },
+    {
+      "source": "/festivals/shravani-mela",
+      "destination": "/festivals/shravani-mela/index.html"
+    },
+    {
+      "source": "/festivals/vaishali-mahotsav",
+      "destination": "/festivals/vaishali-mahotsav/index.html"
+    },
+    {
+      "source": "/festivals/bodh-mahotsav",
+      "destination": "/festivals/bodh-mahotsav/index.html"
+    },
+    {
+      "source": "/festivals/malmas-mela",
+      "destination": "/festivals/malmas-mela/index.html"
+    },
+    {
+      "source": "/festivals/mandar-mela",
+      "destination": "/festivals/mandar-mela/index.html"
+    },
+    {
+      "source": "/festivals/kako-urs",
+      "destination": "/festivals/kako-urs/index.html"
+    },
+    {
+      "source": "/festivals/bihar-diwas",
+      "destination": "/festivals/bihar-diwas/index.html"
+    },
+    {
+      "source": "/religion",
+      "destination": "/religion/index.html"
+    },
+    {
+      "source": "/religion/traditions",
+      "destination": "/religion/traditions/index.html"
+    },
+    {
+      "source": "/religion/sacred-places",
+      "destination": "/religion/sacred-places/index.html"
+    },
+    {
+      "source": "/religion/pilgrimage",
+      "destination": "/religion/pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/sacred-rivers",
+      "destination": "/religion/sacred-rivers/index.html"
+    },
+    {
+      "source": "/religion/architecture",
+      "destination": "/religion/architecture/index.html"
+    },
+    {
+      "source": "/religion/history",
+      "destination": "/religion/history/index.html"
+    },
+    {
+      "source": "/religion/mahabodhi-temple",
+      "destination": "/religion/mahabodhi-temple/index.html"
+    },
+    {
+      "source": "/religion/rajgir-sacred-landscape",
+      "destination": "/religion/rajgir-sacred-landscape/index.html"
+    },
+    {
+      "source": "/religion/griddhakuta",
+      "destination": "/religion/griddhakuta/index.html"
+    },
+    {
+      "source": "/religion/saptaparni-cave",
+      "destination": "/religion/saptaparni-cave/index.html"
+    },
+    {
+      "source": "/religion/nalanda-mahavihara",
+      "destination": "/religion/nalanda-mahavihara/index.html"
+    },
+    {
+      "source": "/religion/vaishali-sacred-landscape",
+      "destination": "/religion/vaishali-sacred-landscape/index.html"
+    },
+    {
+      "source": "/religion/kesaria-stupa",
+      "destination": "/religion/kesaria-stupa/index.html"
+    },
+    {
+      "source": "/religion/pawapuri-jal-mandir",
+      "destination": "/religion/pawapuri-jal-mandir/index.html"
+    },
+    {
+      "source": "/religion/lachhuar-jain-temple",
+      "destination": "/religion/lachhuar-jain-temple/index.html"
+    },
+    {
+      "source": "/religion/vishnupad-temple",
+      "destination": "/religion/vishnupad-temple/index.html"
+    },
+    {
+      "source": "/religion/mundeshwari-temple",
+      "destination": "/religion/mundeshwari-temple/index.html"
+    },
+    {
+      "source": "/religion/garibnath-temple",
+      "destination": "/religion/garibnath-temple/index.html"
+    },
+    {
+      "source": "/religion/hariharnath-temple",
+      "destination": "/religion/hariharnath-temple/index.html"
+    },
+    {
+      "source": "/religion/badi-patan-devi",
+      "destination": "/religion/badi-patan-devi/index.html"
+    },
+    {
+      "source": "/religion/janaki-sthan",
+      "destination": "/religion/janaki-sthan/index.html"
+    },
+    {
+      "source": "/religion/ahilya-asthan",
+      "destination": "/religion/ahilya-asthan/index.html"
+    },
+    {
+      "source": "/religion/panth-pakar",
+      "destination": "/religion/panth-pakar/index.html"
+    },
+    {
+      "source": "/religion/takht-patna-sahib",
+      "destination": "/religion/takht-patna-sahib/index.html"
+    },
+    {
+      "source": "/religion/bal-leela-gurdwara",
+      "destination": "/religion/bal-leela-gurdwara/index.html"
+    },
+    {
+      "source": "/religion/guru-ka-bagh",
+      "destination": "/religion/guru-ka-bagh/index.html"
+    },
+    {
+      "source": "/religion/maner-sharif",
+      "destination": "/religion/maner-sharif/index.html"
+    },
+    {
+      "source": "/religion/bihar-sharif-badi-dargah",
+      "destination": "/religion/bihar-sharif-badi-dargah/index.html"
+    },
+    {
+      "source": "/religion/phulwari-sharif",
+      "destination": "/religion/phulwari-sharif/index.html"
+    },
+    {
+      "source": "/religion/padri-ki-haveli",
+      "destination": "/religion/padri-ki-haveli/index.html"
+    },
+    {
+      "source": "/religion/kako-bibi-kamal",
+      "destination": "/religion/kako-bibi-kamal/index.html"
+    },
+    {
+      "source": "/religion/buddhism",
+      "destination": "/religion/buddhism/index.html"
+    },
+    {
+      "source": "/religion/jainism",
+      "destination": "/religion/jainism/index.html"
+    },
+    {
+      "source": "/religion/hindu-traditions",
+      "destination": "/religion/hindu-traditions/index.html"
+    },
+    {
+      "source": "/religion/sikhism",
+      "destination": "/religion/sikhism/index.html"
+    },
+    {
+      "source": "/religion/islam",
+      "destination": "/religion/islam/index.html"
+    },
+    {
+      "source": "/religion/christianity",
+      "destination": "/religion/christianity/index.html"
+    },
+    {
+      "source": "/religion/folk-traditions",
+      "destination": "/religion/folk-traditions/index.html"
+    },
+    {
+      "source": "/religion/sun-and-water-traditions",
+      "destination": "/religion/sun-and-water-traditions/index.html"
+    },
+    {
+      "source": "/religion/gaya-pitru-traditions",
+      "destination": "/religion/gaya-pitru-traditions/index.html"
+    },
+    {
+      "source": "/religion/shaiva-shakta-traditions",
+      "destination": "/religion/shaiva-shakta-traditions/index.html"
+    },
+    {
+      "source": "/religion/mithila-household-traditions",
+      "destination": "/religion/mithila-household-traditions/index.html"
+    },
+    {
+      "source": "/religion/salhesh-tradition",
+      "destination": "/religion/salhesh-tradition/index.html"
+    },
+    {
+      "source": "/religion/bihula-bishahari-tradition",
+      "destination": "/religion/bihula-bishahari-tradition/index.html"
+    },
+    {
+      "source": "/religion/sacred-tree-traditions",
+      "destination": "/religion/sacred-tree-traditions/index.html"
+    },
+    {
+      "source": "/religion/kurji-hospital",
+      "destination": "/religion/kurji-hospital/index.html"
+    },
+    {
+      "source": "/religion/patna-womens-college",
+      "destination": "/religion/patna-womens-college/index.html"
+    },
+    {
+      "source": "/religion/buddhist-pilgrimage",
+      "destination": "/religion/buddhist-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/jain-pilgrimage",
+      "destination": "/religion/jain-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/hindu-pilgrimage",
+      "destination": "/religion/hindu-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/sikh-pilgrimage",
+      "destination": "/religion/sikh-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/sufi-pilgrimage",
+      "destination": "/religion/sufi-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/mithila-pilgrimage",
+      "destination": "/religion/mithila-pilgrimage/index.html"
+    },
+    {
+      "source": "/religion/temple-architecture",
+      "destination": "/religion/temple-architecture/index.html"
+    },
+    {
+      "source": "/religion/stupa-architecture",
+      "destination": "/religion/stupa-architecture/index.html"
+    },
+    {
+      "source": "/religion/monastery-architecture",
+      "destination": "/religion/monastery-architecture/index.html"
+    },
+    {
+      "source": "/religion/mosque-architecture",
+      "destination": "/religion/mosque-architecture/index.html"
+    },
+    {
+      "source": "/religion/dargah-architecture",
+      "destination": "/religion/dargah-architecture/index.html"
+    },
+    {
+      "source": "/religion/gurdwara-architecture",
+      "destination": "/religion/gurdwara-architecture/index.html"
+    },
+    {
+      "source": "/religion/church-architecture",
+      "destination": "/religion/church-architecture/index.html"
+    },
+    {
+      "source": "/religion/cave-architecture",
+      "destination": "/religion/cave-architecture/index.html"
+    },
+    {
+      "source": "/religion/pilgrimage-architecture",
+      "destination": "/religion/pilgrimage-architecture/index.html"
+    },
+    {
+      "source": "/religion/ganga-sacred-context",
+      "destination": "/religion/ganga-sacred-context/index.html"
+    },
+    {
+      "source": "/religion/gandak-sacred-context",
+      "destination": "/religion/gandak-sacred-context/index.html"
+    },
+    {
+      "source": "/religion/falgu-sacred-context",
+      "destination": "/religion/falgu-sacred-context/index.html"
+    },
+    {
+      "source": "/religion/ancient-sacred-memory",
+      "destination": "/religion/ancient-sacred-memory/index.html"
+    },
+    {
+      "source": "/religion/buddhist-council-memory",
+      "destination": "/religion/buddhist-council-memory/index.html"
+    },
+    {
+      "source": "/religion/mauryan-monument-memory",
+      "destination": "/religion/mauryan-monument-memory/index.html"
+    },
+    {
+      "source": "/religion/monastic-learning-history",
+      "destination": "/religion/monastic-learning-history/index.html"
+    },
+    {
+      "source": "/religion/sufi-institutional-history",
+      "destination": "/religion/sufi-institutional-history/index.html"
+    },
+    {
+      "source": "/religion/patna-sikh-memory",
+      "destination": "/religion/patna-sikh-memory/index.html"
+    },
+    {
+      "source": "/religion/patna-church-history",
+      "destination": "/religion/patna-church-history/index.html"
+    },
+    {
+      "source": "/religion/modern-institutional-heritage",
+      "destination": "/religion/modern-institutional-heritage/index.html"
+    },
+    {
+      "source": "/religion/explore",
+      "destination": "/religion/explore/index.html"
+    },
+    {
+      "source": "/personalities/rajendra-prasad",
+      "destination": "/personalities/rajendra-prasad/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

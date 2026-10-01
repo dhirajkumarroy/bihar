@@ -4,6 +4,7 @@
     "build": "node scripts/generate-sitemap.cjs && vite build && node scripts/prerender-festivals.cjs && node scripts/prerender-religion.cjs && node scripts/prerender-personalities.cjs",
     "validate:personalities": "node scripts/validate-personalities.cjs",
     "test:personalities": "node scripts/test-personalities.cjs",
+    "test:kunwar-singh": "node scripts/test-kunwar-singh.cjs",
     "validate:religion": "node scripts/validate-religion.cjs",
     "test:religion": "node scripts/test-religion.cjs",
     "validate:religion-html": "node scripts/validate-religion-html.cjs",

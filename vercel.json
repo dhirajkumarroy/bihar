@@ -438,6 +438,10 @@
       "destination": "/religion/explore/index.html"
     },
     {
+      "source": "/personalities/kunwar-singh",
+      "destination": "/personalities/kunwar-singh/index.html"
+    },
+    {
       "source": "/personalities/rajendra-prasad",
       "destination": "/personalities/rajendra-prasad/index.html"
     },

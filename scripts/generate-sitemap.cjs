@@ -144,6 +144,10 @@ const knownPaths=new Set(Array.from(urls).map(s=>new URL(JSON.parse(s).loc).path
 for(const route of [p1.canonical,...p1.sections.flatMap(s=>(s.links||[]).map(([,to])=>to)),...p1.places.map(p=>p.to),...p1.relatedPeople.filter(p=>p.to).map(p=>p.to),'/history/rajendra-prasad']){
  const clean=route.split('#')[0];if(!knownPaths.has(clean)){addUrl(clean,'0.7','monthly');knownPaths.add(clean);}
 }
+// Scoped Kunwar Singh integration: canonical routes only, never aliases/fragments.
+for(const route of ['/personalities/kunwar-singh','/tourism/jagdishpur-fort','/history/1857-bihar','/history/veer-kunwar-singh']){
+ if(!knownPaths.has(route)){addUrl(route,'0.7','monthly');knownPaths.add(route);}
+}
 const urlList = Array.from(urls).map(s => JSON.parse(s));
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

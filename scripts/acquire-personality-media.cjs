@@ -1,8 +1,10 @@
 // Editorial asset acquisition, separate from builds. Preserve source rights metadata.
 const fs=require('node:fs'),path=require('node:path');
 const sharp=require('../.g9-browser-audit/c8-tools/node_modules/sharp');
-const requests=require('../docs/P1-MEDIA-REQUESTS.json');
-const root=path.resolve(__dirname,'../public/images/personalities/rajendra-prasad');
+const kunwar=process.argv.includes('--kunwar');
+const requests=require(kunwar?'../docs/KUNWAR-MEDIA-REQUESTS.json':'../docs/P1-MEDIA-REQUESTS.json');
+const profileSlug=kunwar?'kunwar-singh':'rajendra-prasad';
+const root=path.resolve(__dirname,'../public/images/personalities',profileSlug);
 const clean=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&#39;/g,"'").trim();
 async function get(url){const r=await fetch(url,{headers:{'User-Agent':'BiharPortalEditorial/1.0 (historical photograph attribution)'},signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(r.status+' '+url);return r;}
 (async()=>{
@@ -16,8 +18,10 @@ async function get(url){const r=await fetch(url,{headers:{'User-Agent':'BiharPor
    if(!/^(CC BY|CC0|Public domain|GODL-India)/.test(license)||!licenseUrl)throw Error('Manual licence review: '+license);
    console.log('SOURCE',asset.id,JSON.stringify({license,description:clean(m.ImageDescription?.value),date:clean(m.DateTimeOriginal?.value),credit:clean(m.Artist?.value)}));
    const input=Buffer.from(await(await get(info.thumburl||info.url)).arrayBuffer()),original=sharp(input);
-   const src='/images/personalities/rajendra-prasad/'+asset.id+'.webp';
-   const encoded=await original.clone().resize({width:1200,withoutEnlargement:true}).webp({quality:80}).toBuffer();if(encoded.length>450*1024)throw Error('Optimise asset over 450KB');
+   const src='/images/personalities/'+profileSlug+'/'+asset.id+'.webp';
+   let encoded=await original.clone().resize({width:1200,withoutEnlargement:true}).webp({quality:80}).toBuffer();
+   if(encoded.length>450*1024)encoded=await original.clone().resize({width:960,withoutEnlargement:true}).webp({quality:72}).toBuffer();
+   if(encoded.length>450*1024)throw Error('Optimise asset over 450KB');
    fs.writeFileSync(path.join(root,asset.id+'.webp'),encoded);
    await original.clone().resize({width:480,withoutEnlargement:true}).webp({quality:76}).toFile(path.join(root,asset.id+'-small.webp'));
    const dimensions=await sharp(encoded).metadata(),small=await sharp(path.join(root,asset.id+'-small.webp')).metadata();

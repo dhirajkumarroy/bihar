@@ -39,7 +39,10 @@ const content=JSON.stringify(x);check(!/उन्होंने अकेले
 if(process.argv.includes('--html')){
  const file=path.join(root,'dist/personalities/rajendra-prasad/index.html');check(fs.existsSync(file),'prerender exists');if(fs.existsSync(file)){const html=fs.readFileSync(file,'utf8');check(html.includes(`<title>${x.seo.title}</title>`),'static title');check((html.match(/<h1\b/g)||[]).length===1,'one static H1');for(const s of x.sections)check(html.includes(`id="${s.id}"`),'static section '+s.id);for(const e of x.timeline)check(html.includes(e.text),'all static timeline content '+e.id);for(const m of media)check(html.includes(m.src)&&html.includes(m.source),'static media and credit '+m.id);for(const tag of ['og:title','og:description','og:image','twitter:card','twitter:image'])check(html.includes(`="${tag}"`),'static '+tag);const blocks=[...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(m=>JSON.parse(m[1]));check(blocks.some(s=>s['@type']==='Article'&&s.about?.['@type']==='Person'),'static Person/Article');check(blocks.some(s=>s['@type']==='BreadcrumbList'),'static breadcrumbs');check(!html.includes('event-button-'),'no inert JavaScript-only timeline controls in static HTML');}
 }
-console.log(`Personalities P1: ${checks} checks, ${errors.length} errors; 1 expanded profile, 8 existing generic profiles preserved.`);
+console.log(`Personalities P1: ${checks} checks, ${errors.length} errors; Rajendra Prasad regression checks; all nine catalog records preserved.`);
 console.log(`Coverage: ${x.sections.length} sections, ${x.timeline.length} life events, ${x.constitutionTimeline.length} constitutional events, ${media.length} visuals, ${sources.length} sources.`);
 console.log('WARNING: Student-era/birthplace photos still unverified; Atmakatha first-publication discrepancy is disclosed. Automated checks validate references and known regressions, not historical truth.');
 if(errors.length){errors.forEach(e=>console.error('ERROR:',e));process.exitCode=1;}
+// Keep P1 checks unchanged; validate the second expanded profile independently.
+const kunwarResult=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'validate-kunwar-singh.cjs'),...process.argv.slice(2)],{stdio:'inherit'});
+if(kunwarResult.status!==0)process.exitCode=1;

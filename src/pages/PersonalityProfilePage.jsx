@@ -5,9 +5,10 @@ import {SEO,Breadcrumbs} from '../components/Portal';
 import {siteConfig} from '../siteConfig';
 import {rajendraPrasad as profile,personalitySources,personalitySourceById as sources,personalityMediaById as media,personalitySchema} from '../data/personalities/index.js';
 import '../personalities.css';
+import {ProfileReferences,ProfileImage} from '../components/personalities/ProfilePrimitives';
 
-function References({ids}){return <ul className="p1-refs" aria-label="इस कथन के स्रोत">{[...new Set(ids)].map(id=><li key={id}><a href={'#source-'+id} title={sources[id].title}>{sources[id].publisher}</a></li>)}</ul>}
-function Photograph({id,hero=false}){const m=media[id];if(!m)return null;return <figure className={'p1-photo'+(hero?' p1-portrait':'')}><img src={m.src} srcSet={`${m.thumbnail} ${m.smallWidth}w, ${m.src} ${m.width}w`} sizes={hero?'(max-width: 767px) 90vw, 38vw':'(max-width: 767px) 90vw, 42vw'} width={m.width} height={m.height} alt={m.alt} loading={hero?'eager':'lazy'} fetchPriority={hero?'high':undefined} decoding="async"/><figcaption>{m.caption}<details><summary>चित्र स्रोत और उपयोग-अधिकार</summary><p><a href={m.source}>{m.credit}</a> · <a href={m.licenseUrl}>{m.license}</a></p><p>आकार बदलकर WebP में रूपांतरित; विषय में कोई बदलाव या AI पुनर्निर्माण नहीं।</p></details></figcaption></figure>}
+function References({ids}){return <ProfileReferences ids={ids} sources={sources}/>}
+function Photograph({id,hero=false}){return <ProfileImage media={media[id]} hero={hero}/>}
 function Paragraphs({items}){return items.map((p,i)=><div className="p1-claim" key={i}><p>{p.text}</p><References ids={p.sources}/></div>)}
 function EventList({events}){return <ol className="p1-milestones">{events.map(e=><li key={e.id}><time dateTime={e.date}>{e.label}</time><h3>{e.title}</h3><p>{e.text}</p><References ids={e.sources}/></li>)}</ol>}
 const periods=[['all','सभी पड़ाव'],['early','जीवन और शिक्षा'],['movement','स्वतंत्रता आंदोलन'],['constitution','संविधान सभा'],['presidency','गणराज्य और अंतिम वर्ष']];

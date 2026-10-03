@@ -13,7 +13,7 @@ const json=x=>JSON.stringify(x).replace(/</g,'\\u003c');
  const records=[
   {x:p1.rajendraPrasad,portrait:p1.personalityMediaById.portrait,schema:p1.personalitySchema(p1.rajendraPrasad,origin),page:'src/pages/PersonalityProfilePage.jsx'},
   {x:ks.kunwarSingh,portrait:ks.kunwarMediaById['kunwar-engraving'],schema:ks.kunwarSchema(origin),page:'src/pages/KunwarSinghProfilePage.jsx'},
-  ...['ashoka','chanakya','aryabhata'].map(slug=>{const x=loadDataModule(path.join(root,'src/data/personalities/'+slug+'.js'))[slug];return {x,portrait:x.hero,schema:ancientSchema(x,origin),page:'src/pages/'+slug[0].toUpperCase()+slug.slice(1)+'ProfilePage.jsx'};})
+  ...['ashoka','chanakya','aryabhata','dinkar','renu','bhikhariThakur','jayaprakashNarayan'].map(key=>{const x=loadDataModule(path.join(root,'src/data/personalities/'+key+'.js'))[key];return {x,portrait:x.hero,schema:ancientSchema(x,origin),page:'src/pages/'+key[0].toUpperCase()+key.slice(1)+'ProfilePage.jsx'};})
  ];
  const manifest=JSON.parse(fs.readFileSync(path.join(dist,'.vite/manifest.json'),'utf8'));
  function cssFor(key,seen=new Set()){

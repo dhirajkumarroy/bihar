@@ -1,6 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    {"source":"/personalities/ramdhari-dinkar","destination":"/personalities/ramdhari-dinkar/index.html"},
+    {"source":"/personalities/phanishwar-renu","destination":"/personalities/phanishwar-renu/index.html"},
+    {"source":"/personalities/bhikhari-thakur","destination":"/personalities/bhikhari-thakur/index.html"},
+    {"source":"/personalities/jayaprakash-narayan","destination":"/personalities/jayaprakash-narayan/index.html"},
     {"source":"/personalities/ashoka","destination":"/personalities/ashoka/index.html"},
     {"source":"/personalities/chanakya","destination":"/personalities/chanakya/index.html"},
     {"source":"/personalities/aryabhata","destination":"/personalities/aryabhata/index.html"},

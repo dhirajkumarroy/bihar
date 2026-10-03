@@ -48,3 +48,5 @@ const kunwarResult=require('node:child_process').spawnSync(process.execPath,[pat
 if(kunwarResult.status!==0)process.exitCode=1;
 const ancientResult=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'validate-ancient-personalities.cjs'),...process.argv.slice(2)],{stdio:'inherit'});
 if(ancientResult.status!==0)process.exitCode=1;
+const modernResult=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'validate-modern-personalities.cjs'),...process.argv.slice(2)],{stdio:'inherit'});
+if(modernResult.status!==0)process.exitCode=1;

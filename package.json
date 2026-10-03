@@ -6,6 +6,7 @@
     "test:personalities": "node scripts/test-personalities.cjs",
     "test:kunwar-singh": "node scripts/test-kunwar-singh.cjs",
     "test:ancient-personalities": "node scripts/test-ancient-personalities.cjs",
+    "test:modern-personalities": "node scripts/test-ancient-personalities.cjs --modern",
     "validate:religion": "node scripts/validate-religion.cjs",
     "test:religion": "node scripts/test-religion.cjs",
     "validate:religion-html": "node scripts/validate-religion-html.cjs",

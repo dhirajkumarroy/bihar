@@ -3,8 +3,9 @@ const fs=require('node:fs'),path=require('node:path');
 const sharp=require('../.g9-browser-audit/c8-tools/node_modules/sharp');
 const kunwar=process.argv.includes('--kunwar');
 const ancient=process.argv.includes('--ancient');
-const requests=require(ancient?'../docs/ANCIENT-PERSONALITY-MEDIA-REQUESTS.json':kunwar?'../docs/KUNWAR-MEDIA-REQUESTS.json':'../docs/P1-MEDIA-REQUESTS.json');
-const profileSlug=ancient?'ancient':kunwar?'kunwar-singh':'rajendra-prasad';
+const modern=process.argv.includes('--modern');
+const requests=require(modern?'../docs/MODERN-PERSONALITY-MEDIA-REQUESTS.json':ancient?'../docs/ANCIENT-PERSONALITY-MEDIA-REQUESTS.json':kunwar?'../docs/KUNWAR-MEDIA-REQUESTS.json':'../docs/P1-MEDIA-REQUESTS.json');
+const profileSlug=modern?'modern':ancient?'ancient':kunwar?'kunwar-singh':'rajendra-prasad';
 const root=path.resolve(__dirname,'../public/images/personalities',profileSlug);
 const clean=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&#39;/g,"'").trim();
 async function get(url){const r=await fetch(url,{headers:{'User-Agent':'BiharPortalEditorial/1.0 (historical photograph attribution)'},signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(r.status+' '+url);return r;}

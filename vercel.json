@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    {"source":"/personalities/ashoka","destination":"/personalities/ashoka/index.html"},
+    {"source":"/personalities/chanakya","destination":"/personalities/chanakya/index.html"},
+    {"source":"/personalities/aryabhata","destination":"/personalities/aryabhata/index.html"},
     {
       "source": "/festivals",
       "destination": "/festivals/index.html"

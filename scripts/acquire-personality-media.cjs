@@ -2,8 +2,9 @@
 const fs=require('node:fs'),path=require('node:path');
 const sharp=require('../.g9-browser-audit/c8-tools/node_modules/sharp');
 const kunwar=process.argv.includes('--kunwar');
-const requests=require(kunwar?'../docs/KUNWAR-MEDIA-REQUESTS.json':'../docs/P1-MEDIA-REQUESTS.json');
-const profileSlug=kunwar?'kunwar-singh':'rajendra-prasad';
+const ancient=process.argv.includes('--ancient');
+const requests=require(ancient?'../docs/ANCIENT-PERSONALITY-MEDIA-REQUESTS.json':kunwar?'../docs/KUNWAR-MEDIA-REQUESTS.json':'../docs/P1-MEDIA-REQUESTS.json');
+const profileSlug=ancient?'ancient':kunwar?'kunwar-singh':'rajendra-prasad';
 const root=path.resolve(__dirname,'../public/images/personalities',profileSlug);
 const clean=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&#39;/g,"'").trim();
 async function get(url){const r=await fetch(url,{headers:{'User-Agent':'BiharPortalEditorial/1.0 (historical photograph attribution)'},signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(r.status+' '+url);return r;}
@@ -26,7 +27,7 @@ async function get(url){const r=await fetch(url,{headers:{'User-Agent':'BiharPor
    await original.clone().resize({width:480,withoutEnlargement:true}).webp({quality:76}).toFile(path.join(root,asset.id+'-small.webp'));
    const dimensions=await sharp(encoded).metadata(),small=await sharp(path.join(root,asset.id+'-small.webp')).metadata();
    const previous=ledger.findIndex(x=>x.id===asset.id);if(previous>=0)ledger.splice(previous,1);
-   ledger.push({id:asset.id,page:asset.page||1,src,thumbnail:src.replace('.webp','-small.webp'),width:dimensions.width,height:dimensions.height,smallWidth:small.width,alt:asset.alt,caption:asset.caption,credit:clean(m.Artist?.value),source:info.descriptionurl,original:info.url,license,licenseUrl,type:asset.type||'authentic-photograph',changes:'Resized and converted to WebP; no subject alterations or generated imagery.',reviewedOn:'2026-09-30'});
+   ledger.push({id:asset.id,page:asset.page||1,src,thumbnail:src.replace('.webp','-small.webp'),width:dimensions.width,height:dimensions.height,smallWidth:small.width,alt:asset.alt,caption:asset.caption,credit:clean(m.Artist?.value),source:info.descriptionurl,original:info.url,license,licenseUrl,type:asset.type||'authentic-photograph',changes:'Resized and converted to WebP; no subject alterations or generated imagery.',reviewedOn:asset.reviewedOn||'2026-09-30'});
    fs.writeFileSync(ledgerFile,JSON.stringify(ledger,null,2)+'\n');console.log('SAVED',asset.id,encoded.length);
   }catch(e){console.error('FAILED',asset.id,e.message);process.exitCode=1;}
  }

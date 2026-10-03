@@ -46,3 +46,5 @@ if(errors.length){errors.forEach(e=>console.error('ERROR:',e));process.exitCode=
 // Keep P1 checks unchanged; validate the second expanded profile independently.
 const kunwarResult=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'validate-kunwar-singh.cjs'),...process.argv.slice(2)],{stdio:'inherit'});
 if(kunwarResult.status!==0)process.exitCode=1;
+const ancientResult=require('node:child_process').spawnSync(process.execPath,[path.join(__dirname,'validate-ancient-personalities.cjs'),...process.argv.slice(2)],{stdio:'inherit'});
+if(ancientResult.status!==0)process.exitCode=1;

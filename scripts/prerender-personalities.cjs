@@ -9,9 +9,11 @@ const json=x=>JSON.stringify(x).replace(/</g,'\\u003c');
  const origin=(process.env.VITE_SITE_URL||loadEnv('production',root,'VITE_SITE_URL').VITE_SITE_URL||'https://bihar-eight.vercel.app').replace(/\/+$/,'');
  const p1=loadDataModule(path.join(root,'src/data/personalities/index.js'));
  const ks=loadDataModule(path.join(root,'src/data/personalities/kunwarSingh.js'));
+ const {ancientSchema}=loadDataModule(path.join(root,'src/data/personalities/ancientSupport.js'));
  const records=[
   {x:p1.rajendraPrasad,portrait:p1.personalityMediaById.portrait,schema:p1.personalitySchema(p1.rajendraPrasad,origin),page:'src/pages/PersonalityProfilePage.jsx'},
-  {x:ks.kunwarSingh,portrait:ks.kunwarMediaById['kunwar-engraving'],schema:ks.kunwarSchema(origin),page:'src/pages/KunwarSinghProfilePage.jsx'}
+  {x:ks.kunwarSingh,portrait:ks.kunwarMediaById['kunwar-engraving'],schema:ks.kunwarSchema(origin),page:'src/pages/KunwarSinghProfilePage.jsx'},
+  ...['ashoka','chanakya','aryabhata'].map(slug=>{const x=loadDataModule(path.join(root,'src/data/personalities/'+slug+'.js'))[slug];return {x,portrait:x.hero,schema:ancientSchema(x,origin),page:'src/pages/'+slug[0].toUpperCase()+slug.slice(1)+'ProfilePage.jsx'};})
  ];
  const manifest=JSON.parse(fs.readFileSync(path.join(dist,'.vite/manifest.json'),'utf8'));
  function cssFor(key,seen=new Set()){

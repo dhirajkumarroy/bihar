@@ -1,0 +1,18 @@
+[
+  {
+    "id": "arthashastra-manuscript",
+    "file": "Rediscovered circa 16th century Arthashastra manuscript in Grantha script from the Oriental Research Institute (ORI) which was found in 1905 06.jpg",
+    "alt": "ग्रन्थ लिपि में अर्थशास्त्र की बाद की ताड़पत्र पांडुलिपि का एक पृष्ठ",
+    "caption": "अर्थशास्त्र की लगभग 16वीं सदी की प्रति का पृष्ठ, ओरिएंटल रिसर्च इंस्टीट्यूट संग्रह। यह मौर्यकालीन मूल या चाणक्य की हस्तलिपि नहीं है।",
+    "type": "historical-manuscript-reproduction",
+    "reviewedOn": "2026-10-03"
+  },
+  {
+    "id": "aryabhata-statue",
+    "file": "2064 aryabhata-crp.jpg",
+    "alt": "आर्यभट की आधुनिक स्मारक प्रतिमा",
+    "caption": "आर्यभट की आधुनिक कल्पित प्रतिमा; उनके जीवनकाल का प्रमाणित चित्र उपलब्ध होने का दावा नहीं।",
+    "type": "modern-commemorative-sculpture",
+    "reviewedOn": "2026-10-03"
+  }
+]

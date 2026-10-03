@@ -1,0 +1,40 @@
+[
+  {
+    "id": "arthashastra-manuscript",
+    "page": 1,
+    "src": "/images/personalities/ancient/arthashastra-manuscript.webp",
+    "thumbnail": "/images/personalities/ancient/arthashastra-manuscript-small.webp",
+    "width": 1200,
+    "height": 199,
+    "smallWidth": 480,
+    "alt": "ग्रन्थ लिपि में अर्थशास्त्र की बाद की ताड़पत्र पांडुलिपि का एक पृष्ठ",
+    "caption": "अर्थशास्त्र की लगभग 16वीं सदी की प्रति का पृष्ठ, ओरिएंटल रिसर्च इंस्टीट्यूट संग्रह। यह मौर्यकालीन मूल या चाणक्य की हस्तलिपि नहीं है।",
+    "credit": "Unknown scribe",
+    "source": "https://commons.wikimedia.org/wiki/File:Rediscovered_circa_16th_century_Arthashastra_manuscript_in_Grantha_script_from_the_Oriental_Research_Institute_(ORI)_which_was_found_in_1905_06.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/5/58/Rediscovered_circa_16th_century_Arthashastra_manuscript_in_Grantha_script_from_the_Oriental_Research_Institute_%28ORI%29_which_was_found_in_1905_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "type": "historical-manuscript-reproduction",
+    "changes": "Resized and converted to WebP; no subject alterations or generated imagery.",
+    "reviewedOn": "2026-10-03"
+  },
+  {
+    "id": "aryabhata-statue",
+    "page": 1,
+    "src": "/images/personalities/ancient/aryabhata-statue.webp",
+    "thumbnail": "/images/personalities/ancient/aryabhata-statue-small.webp",
+    "width": 951,
+    "height": 1361,
+    "smallWidth": 480,
+    "alt": "आर्यभट की आधुनिक स्मारक प्रतिमा",
+    "caption": "आर्यभट की आधुनिक कल्पित प्रतिमा; उनके जीवनकाल का प्रमाणित चित्र उपलब्ध होने का दावा नहीं।",
+    "credit": "",
+    "source": "https://commons.wikimedia.org/wiki/File:2064_aryabhata-crp.jpg",
+    "original": "https://upload.wikimedia.org/wikipedia/commons/a/af/2064_aryabhata-crp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "type": "modern-commemorative-sculpture",
+    "changes": "Resized and converted to WebP; no subject alterations or generated imagery.",
+    "reviewedOn": "2026-10-03"
+  }
+]

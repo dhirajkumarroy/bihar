@@ -148,6 +148,13 @@ for(const route of [p1.canonical,...p1.sections.flatMap(s=>(s.links||[]).map(([,
 for(const route of ['/personalities/kunwar-singh','/tourism/jagdishpur-fort','/history/1857-bihar','/history/veer-kunwar-singh']){
  if(!knownPaths.has(route)){addUrl(route,'0.7','monthly');knownPaths.add(route);}
 }
+// Deep ancient profiles link to real history/destination pages omitted by the legacy parser.
+for(const slug of ['ashoka','chanakya','aryabhata']){
+ const profile=loadDataModule(path.join(__dirname,'../src/data/personalities/'+slug+'.js'))[slug];
+ for(const route of [profile.canonical,...profile.sections.flatMap(s=>(s.links||[]).map(([,to])=>to)),...profile.related.map(p=>p.to)]){
+  const clean=route.split('#')[0];if(!knownPaths.has(clean)){addUrl(clean,'0.7','monthly');knownPaths.add(clean);}
+ }
+}
 const urlList = Array.from(urls).map(s => JSON.parse(s));
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -25,6 +25,9 @@ const PoliticsPage=lazy(()=>import('./pages/PoliticsPages'));
 const ReligionPage=lazy(()=>import('./pages/ReligionPages'));
 const PersonalityProfilePage=lazy(()=>import('./pages/PersonalityProfilePage'));
 const KunwarSinghProfilePage=lazy(()=>import('./pages/KunwarSinghProfilePage'));
+const AshokaProfilePage=lazy(()=>import('./pages/AshokaProfilePage'));
+const ChanakyaProfilePage=lazy(()=>import('./pages/ChanakyaProfilePage'));
+const AryabhataProfilePage=lazy(()=>import('./pages/AryabhataProfilePage'));
 const About=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.AboutPage})));const Contact=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.ContactPage})));const Privacy=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.PrivacyPage})));const Cookies=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.CookiePage})));const EditorialPolicy=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.EditorialPolicyPage})));const Advertising=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.AdvertisingPolicyPage})));const Disclaimer=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.DisclaimerPage})));const Terms=lazy(()=>import('./pages/PolicyPages').then(m=>({default:m.TermsPage})));
 import {Catalog,CatalogDetail} from './pages/CatalogPages';import {Festivals,FestivalDetail} from './pages/FestivalPages';import {TopicPage,Blog,BlogPost} from './pages/InfoPages';
 function DistrictLegacyRedirect(){const {slug}=useParams();return <Navigate replace to={`/district/${slug}`}/>;}
@@ -40,6 +43,9 @@ export default function App(){return <><AnalyticsTracker/><Navbar/><RouteAnnounc
 <Route path="/about/data-freshness" element={<DataFreshness/>}/><Route path="/institutions" element={<Navigate replace to="/governance#institutions"/>}/>
 <Route path="/personalities/rajendra-prasad" element={<PersonalityProfilePage/>}/>
 <Route path="/personalities/kunwar-singh" element={<KunwarSinghProfilePage/>}/>
+<Route path="/personalities/ashoka" element={<AshokaProfilePage/>}/>
+<Route path="/personalities/chanakya" element={<ChanakyaProfilePage/>}/>
+<Route path="/personalities/aryabhata" element={<AryabhataProfilePage/>}/>
 <Route path="/history/1857" element={<Navigate replace to="/history/1857-bihar"/>}/>
 <Route path="/religion" element={<ReligionPage/>}/><Route path="/religion/:slug" element={<ReligionPage/>}/>
 <Route path="/about" element={<About/>}/><Route path="/contact" element={<Contact/>}/><Route path="/privacy" element={<Privacy/>}/><Route path="/cookies" element={<Cookies/>}/><Route path="/editorial-policy" element={<EditorialPolicy/>}/><Route path="/advertising" element={<Advertising/>}/><Route path="/disclaimer" element={<Disclaimer/>}/><Route path="/terms" element={<Terms/>}/>

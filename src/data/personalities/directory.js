@@ -11,8 +11,14 @@ export const kunwarDiscovery={
  summary:'जगदीशपुर और भोजपुर से आरा–आजमगढ़ अभियान तक: 1857 के नेतृत्व, स्रोतों, समयरेखा और लोकस्मृति का विस्तृत परिचय।',
  canonical:'/personalities/kunwar-singh'
 };
-export const personalityDiscovery=[rajendraDiscovery,kunwarDiscovery];
+export const ancientDiscovery=[
+ {id:'ashoka',slug:'ashoka',nameHindi:'सम्राट अशोक',nameEnglish:'Emperor Ashoka',canonical:'/personalities/ashoka',aliases:['अशोक','अशोक महान','Ashoka','Asoka','Emperor Ashoka','Devanampiya','Piyadassi'],summary:'पाटलिपुत्र से कलिंग और धम्म तक: अभिलेखों, समयरेखा और बिहार के स्तंभों के साथ मौर्य सम्राट का परिचय।'},
+ {id:'chanakya',slug:'chanakya',nameHindi:'चाणक्य',nameEnglish:'Chanakya · Kautilya',canonical:'/personalities/chanakya',aliases:['चाणक्य','कौटिल्य','विष्णुगुप्त','Chanakya','Kautilya','Vishnugupta','Arthashastra','अर्थशास्त्र'],summary:'चंद्रगुप्त से परंपरागत संबंध, अर्थशास्त्र और सप्तांग: व्यक्ति, ग्रंथ और बाद की कथाओं का स्रोत-आधारित परिचय।'},
+ {id:'aryabhata',slug:'aryabhata',nameHindi:'आर्यभट',nameEnglish:'Aryabhata I',canonical:'/personalities/aryabhata',aliases:['आर्यभट','आर्यभट्ट','Aryabhata','Aryabhatta','Aryabhata I','Aryabhatiya','आर्यभटीय','Kusumapura'],summary:'आर्यभटीय, गणित और खगोल की दुनिया: π, कुट्टक, ज्या, पृथ्वी का घूर्णन और कुसुमपुर से संबंध।'}
+];
+export const personalityDiscovery=[rajendraDiscovery,kunwarDiscovery,...ancientDiscovery];
 export const personalitySearchRecords=[
+ ...ancientDiscovery.map(p=>({id:'person:'+p.id,title:p.nameHindi,to:p.canonical,type:'व्यक्तित्व',aliases:p.aliases,description:p.summary})),
  {id:'person:kunwar-singh',title:kunwarDiscovery.nameHindi,to:kunwarDiscovery.canonical,type:'व्यक्तित्व',aliases:kunwarDiscovery.aliases,description:kunwarDiscovery.summary},
  {id:'ks:history',title:'कुँवर सिंह — 1857 का बिहार',to:'/history/1857-bihar',type:'इतिहास',aliases:kunwarDiscovery.aliases,keywords:['Jagdishpur','जगदीशपुर']},
  {id:'ks:bhojpur',title:'भोजपुर',to:'/district/bhojpur',type:'जिला',aliases:kunwarDiscovery.aliases,keywords:['जगदीशपुर','Jagdishpur'],description:'कुँवर सिंह और जगदीशपुर का वर्तमान जिला-संदर्भ।'},
